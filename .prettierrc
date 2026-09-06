@@ -1,0 +1,24 @@
+{
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "importOrder": [
+    "^react$",
+    "^next",
+    "^@next",
+    "<THIRD_PARTY_MODULES>",
+    "^@xyz-eyewear/(.*)$",
+    "^@/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}

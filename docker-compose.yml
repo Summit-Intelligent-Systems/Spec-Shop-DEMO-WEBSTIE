@@ -1,0 +1,152 @@
+version: '3.9'
+
+services:
+  # ─── PostgreSQL Database ──────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: xyz_postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: xyz_eyewear_db
+      POSTGRES_USER: xyz_user
+      POSTGRES_PASSWORD: xyz_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U xyz_user -d xyz_eyewear_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - xyz_network
+
+  # ─── Redis Cache ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: xyz_redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes --requirepass ""
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - xyz_network
+
+  # ─── pgAdmin (Dev UI for PostgreSQL) ─────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: xyz_pgadmin
+    restart: unless-stopped
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@xyzeyewear.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password_dev
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - xyz_network
+    profiles:
+      - dev-tools
+
+  # ─── Redis Commander (Dev UI for Redis) ──────────────────────
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: xyz_redis_commander
+    restart: unless-stopped
+    ports:
+      - '8081:8081'
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - xyz_network
+    profiles:
+      - dev-tools
+
+  # ─── API Server (Express) ────────────────────────────────────
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+      target: development
+    container_name: xyz_api
+    restart: unless-stopped
+    ports:
+      - '4000:4000'
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://xyz_user:xyz_password@postgres:5432/xyz_eyewear_db
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+      - api_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: npm run dev
+    networks:
+      - xyz_network
+    profiles:
+      - full-stack
+
+  # ─── Web Server (Next.js) ─────────────────────────────────────
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      target: development
+    container_name: xyz_web
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api/v1
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+    command: npm run dev
+    networks:
+      - xyz_network
+    profiles:
+      - full-stack
+
+# ─── Networks ────────────────────────────────────────────────────
+networks:
+  xyz_network:
+    driver: bridge
+    name: xyz_network
+
+# ─── Volumes ─────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+    name: xyz_postgres_data
+  redis_data:
+    name: xyz_redis_data
+  pgadmin_data:
+    name: xyz_pgadmin_data
+  api_uploads:
+    name: xyz_api_uploads

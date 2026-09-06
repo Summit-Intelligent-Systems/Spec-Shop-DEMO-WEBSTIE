@@ -1,0 +1,75 @@
+# XYZ Eyewear — Monorepo
+
+## Node & Package Manager
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+## Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+## TypeScript
+*.tsbuildinfo
+dist/
+build/
+out/
+
+## Next.js
+.next/
+out/
+.vercel
+.netlify
+
+## Turborepo cache
+.turbo/
+
+## Testing
+coverage/
+.nyc_output/
+*.lcov
+
+## Prisma
+apps/api/prisma/migrations/dev.db
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
+## Logs
+logs/
+*.log
+
+## OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+## IDE
+.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+## Docker
+docker-volumes/
+
+## Media uploads (local dev)
+apps/api/uploads/
+
+## Misc
+.cache/
+tmp/
+temp/

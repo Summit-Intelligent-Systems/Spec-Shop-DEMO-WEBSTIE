@@ -1,0 +1,62 @@
+{
+  "name": "xyz-eyewear",
+  "version": "0.1.0",
+  "private": true,
+  "description": "XYZ Eyewear — Premium Full-Stack E-Commerce Platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "db:migrate": "turbo run db:migrate",
+    "db:seed": "turbo run db:seed",
+    "db:studio": "turbo run db:studio",
+    "docker:dev": "docker-compose up -d",
+    "docker:dev:build": "docker-compose up -d --build",
+    "docker:down": "docker-compose down",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.3.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx,json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "packageManager": "npm@10.8.0"
+}
