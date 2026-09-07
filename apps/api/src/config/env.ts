@@ -10,17 +10,19 @@ const envSchema = z.object({
   API_URL: z.string().url().default('http://localhost:4000'),
 
   // Database
-  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  // The demo API can boot without external services; production deployments
+  // should override these with managed database and Redis URLs.
+  DATABASE_URL: z.string().min(1).default('postgresql://localhost:5432/xyz_eyewear'),
   DATABASE_POOL_SIZE: z.coerce.number().default(10),
 
   // Redis
-  REDIS_URL: z.string().min(1, 'REDIS_URL is required'),
+  REDIS_URL: z.string().min(1).default('redis://localhost:6379'),
   REDIS_PASSWORD: z.string().optional(),
 
   // JWT
-  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
+  JWT_SECRET: z.string().min(32).default('demo-jwt-secret-change-in-production-32'),
   JWT_EXPIRES_IN: z.string().default('15m'),
-  JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters'),
+  JWT_REFRESH_SECRET: z.string().min(32).default('demo-refresh-secret-change-in-production-32'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('30d'),
   JWT_EMAIL_VERIFY_SECRET: z.string().min(16).optional(),
   JWT_EMAIL_VERIFY_EXPIRES_IN: z.string().default('24h'),
