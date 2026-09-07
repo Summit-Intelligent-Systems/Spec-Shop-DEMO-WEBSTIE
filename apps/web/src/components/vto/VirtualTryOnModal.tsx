@@ -269,7 +269,6 @@ export const VirtualTryOnModal = ({
               {/* Uploaded User Photo */}
               {streamMode === 'upload' && uploadedPhoto && (
                 <div className="relative w-full h-full flex items-center justify-center bg-obsidian-900">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={uploadedPhoto}
                     alt="Your portrait"

@@ -54,8 +54,6 @@ const CRAFT_STEPS = [
 const CraftScene = ({ stepIndex }: { stepIndex: number }) => {
   const groupRef = useRef<THREE.Group>(null);
   const targetRotation = useRef(0);
-  const { camera } = useFrame.length > 0 ? { camera: null as any } : { camera: null as any };
-
   useFrame((state, delta) => {
     if (!groupRef.current) return;
 

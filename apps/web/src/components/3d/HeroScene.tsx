@@ -55,7 +55,7 @@ export const HeroScene = ({ scrollProgress = 0 }: HeroSceneProps) => {
   }, [handlePointerMove, isMobile]);
 
   // Animation loop
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (!groupRef.current) return;
 
     // Auto-rotation (0.15 rad/sec on Y)

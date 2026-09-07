@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 import { PlaceholderFrame } from './PlaceholderFrame';
 import { StudioLighting } from './StudioLighting';
 
@@ -52,8 +52,6 @@ export const QuickView3DScene = ({
   frameStyle,
   frameMaterial,
   frameColor,
-  productName,
-  features,
 }: QuickView3DSceneProps) => {
   const groupRef = useRef<THREE.Group>(null);
 

@@ -81,6 +81,13 @@ module.exports = {
         'no-console': 'off', // Logger used instead
       },
     },
+    {
+      // React Three Fiber elements use JSX props that are not DOM attributes.
+      files: ['apps/web/src/components/3d/**/*.{ts,tsx}'],
+      rules: {
+        'react/no-unknown-property': 'off',
+      },
+    },
   ],
   ignorePatterns: [
     'node_modules/',

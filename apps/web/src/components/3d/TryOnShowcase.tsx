@@ -2,7 +2,7 @@
 
 import { useRef, useState, lazy, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 import { PlaceholderHead } from './PlaceholderHead';
 import { PlaceholderFrame } from './PlaceholderFrame';
 import { StudioLighting } from './StudioLighting';
