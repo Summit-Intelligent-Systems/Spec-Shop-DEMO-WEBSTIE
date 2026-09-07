@@ -321,7 +321,11 @@ export const VirtualTryOnModal = ({
                   </h4>
 
                   <p className="text-xs text-obsidian-300 max-w-sm mb-6 leading-relaxed">
-                    {cameraError ? (
+                    {isStartingCamera ? (
+                      <span className="text-gold-300">
+                        Check the top of your browser window — select <strong className="text-white">&quot;Allow while visiting site&quot;</strong> or <strong className="text-white">&quot;Allow this time&quot;</strong>.
+                      </span>
+                    ) : cameraError ? (
                       <span>
                         Your browser didn&apos;t grant camera access yet. Click below to request permission, then choose <strong className="text-gold">&quot;Allow while visiting site&quot;</strong> or <strong className="text-gold">&quot;Allow this time&quot;</strong> in your browser&apos;s popup.
                       </span>
