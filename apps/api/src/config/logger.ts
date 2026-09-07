@@ -16,6 +16,7 @@ const prettyFormat = combine(
 
 // JSON format for production (structured logging for log aggregators)
 const productionFormat = combine(timestamp(), errors({ stack: true }), json());
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true';
 
 export const logger = winston.createLogger({
   level: env.LOG_LEVEL,
@@ -23,7 +24,7 @@ export const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),
     // Add file transport in production
-    ...(env.NODE_ENV === 'production'
+    ...(env.NODE_ENV === 'production' && !isVercel
       ? [
           new winston.transports.File({
             filename: 'logs/error.log',
