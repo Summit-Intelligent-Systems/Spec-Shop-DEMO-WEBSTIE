@@ -5,6 +5,7 @@
   "description": "XYZ Eyewear — Express.js REST API",
   "main": "dist/main.js",
   "scripts": {
+    "prebuild": "prisma generate",
     "dev": "tsx watch src/main.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js",

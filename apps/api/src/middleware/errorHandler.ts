@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ZodError } from 'zod';
 
 import { logger } from '../config/logger';
@@ -56,7 +56,7 @@ export const errorHandler = (
   }
 
   // ─── Prisma Errors ─────────────────────────────────────────────────────────
-  else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+  else if (error instanceof PrismaClientKnownRequestError) {
     const prismaError = error;
     switch (prismaError.code) {
       case 'P2002': {
