@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Star, Camera, ShoppingBag, Check } from 'lucide-react';
@@ -12,10 +12,35 @@ interface ProductCardProps {
   priority?: boolean;
 }
 
+/**
+ * Product Card with CSS 3D tilt effect.
+ *
+ * Scene 2 — No WebGL. Pure CSS 3D transforms on mousemove:
+ * - perspective(800px) rotateX() rotateY() capped at ±6°
+ * - Dynamic box-shadow shifts opposite to tilt direction
+ * - Product image parallax offset (4-6px) opposite to card tilt
+ * - mouseleave transitions back to neutral with ease-out 400ms
+ * - Mobile: no tilt (touch tilt feels janky)
+ * - Respects prefers-reduced-motion
+ */
 export const ProductCard = ({ product, priority = false }: ProductCardProps) => {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+
+  // 3D tilt state
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, shadowX: 0, shadowY: 0 });
+  const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useRef(false);
+  const isMobile = useRef(false);
+
+  useEffect(() => {
+    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    isMobile.current =
+      window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window;
+  }, []);
 
   const { addItem, openCart } = useCartStore();
 
@@ -28,7 +53,6 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
     e.preventDefault();
     e.stopPropagation();
 
-    // Map to Cart product/variant types
     addItem(
       {
         id: product.id,
@@ -56,8 +80,77 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
     }, 600);
   };
 
+  /** Calculate 3D tilt from mouse position relative to card center */
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (reducedMotion.current || isMobile.current || !cardRef.current) return;
+
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Normalize to [-1, 1]
+    const normalX = (e.clientX - centerX) / (rect.width / 2);
+    const normalY = (e.clientY - centerY) / (rect.height / 2);
+
+    // Clamp rotation to ±6 degrees
+    const maxAngle = 6;
+    const rotateY = normalX * maxAngle;
+    const rotateX = -normalY * maxAngle; // Invert Y for natural tilt
+
+    // Shadow shifts opposite to tilt
+    const shadowX = -normalX * 12;
+    const shadowY = -normalY * 8;
+
+    // Image parallax — opposite to tilt, 4-6px
+    const parallaxX = -normalX * 5;
+    const parallaxY = -normalY * 4;
+
+    setTilt({ rotateX, rotateY, shadowX, shadowY });
+    setImageOffset({ x: parallaxX, y: parallaxY });
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    if (reducedMotion.current || isMobile.current) return;
+    setIsHovering(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovering(false);
+    setTilt({ rotateX: 0, rotateY: 0, shadowX: 0, shadowY: 0 });
+    setImageOffset({ x: 0, y: 0 });
+  }, []);
+
+  const cardStyle: React.CSSProperties = isHovering
+    ? {
+        transform: `perspective(800px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+        boxShadow: `${tilt.shadowX}px ${tilt.shadowY + 16}px 40px -12px rgba(10, 10, 10, 0.18)`,
+        transition: 'transform 0.08s ease-out, box-shadow 0.08s ease-out',
+      }
+    : {
+        transform: 'perspective(800px) rotateX(0deg) rotateY(0deg)',
+        boxShadow: '',
+        transition: 'transform 0.4s ease-out, box-shadow 0.4s ease-out',
+      };
+
+  const imageStyle: React.CSSProperties = isHovering
+    ? {
+        transform: `translate(${imageOffset.x}px, ${imageOffset.y}px) scale(1.05)`,
+        transition: 'transform 0.08s ease-out',
+      }
+    : {
+        transform: 'translate(0px, 0px) scale(1)',
+        transition: 'transform 0.5s ease-out',
+      };
+
   return (
-    <div className="group relative bg-white rounded-2xl border border-obsidian-200/70 hover:border-gold/60 transition-all duration-300 hover:shadow-xl flex flex-col overflow-hidden">
+    <div
+      ref={cardRef}
+      className="group relative bg-white rounded-2xl border border-obsidian-200/70 hover:border-gold/60 transition-colors duration-300 flex flex-col overflow-hidden will-change-transform"
+      style={cardStyle}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {/* ─── Image Container ────────────────────────────────────────────── */}
       <div className="relative aspect-[4/3] bg-obsidian-50 overflow-hidden">
         <Link href={`/product/${product.slug}`} className="block w-full h-full">
@@ -67,7 +160,8 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             priority={priority}
-            className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            className="object-cover object-center"
+            style={imageStyle}
           />
         </Link>
 

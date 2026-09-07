@@ -1,17 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { X, Star, Camera, ShoppingBag, Check, ArrowRight } from 'lucide-react';
 import type { ProductItem } from '@/lib/mockData';
 import { useCartStore } from '@/lib/store/cartStore';
 
+// Lazy-load 3D components
+const LazyCanvas = lazy(() => import('@/components/3d/LazyCanvas'));
+const QuickView3DScene = lazy(() => import('@/components/3d/QuickView3DScene'));
+
 interface QuickViewModalProps {
   product: ProductItem | null;
   onClose: () => void;
   onLaunchTryOn?: (product: ProductItem) => void;
 }
+
+/**
+ * Map product frameShape to PlaceholderFrame style prop
+ */
+const SHAPE_TO_STYLE: Record<string, 'round' | 'aviator' | 'square' | 'cat-eye'> = {
+  ROUND: 'round',
+  AVIATOR: 'aviator',
+  SQUARE: 'square',
+  RECTANGLE: 'square',
+  CAT_EYE: 'cat-eye',
+  GEOMETRIC: 'round',
+};
+
+const MATERIAL_TO_TYPE: Record<string, 'acetate' | 'titanium'> = {
+  ACETATE: 'acetate',
+  TITANIUM: 'titanium',
+  METAL: 'titanium',
+  TR90: 'acetate',
+};
 
 export const QuickViewModal = ({
   product,
@@ -20,6 +43,7 @@ export const QuickViewModal = ({
 }: QuickViewModalProps) => {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
+  const [view3D, setView3D] = useState(true); // Default to 3D view
   const { addItem, openCart } = useCartStore();
 
   if (!product) return null;
@@ -28,6 +52,9 @@ export const QuickViewModal = ({
   const discountPercent = Math.round(
     ((product.comparePrice - product.price) / product.comparePrice) * 100,
   );
+
+  const frameStyle = SHAPE_TO_STYLE[product.frameShape] || 'round';
+  const frameMaterial = MATERIAL_TO_TYPE[product.frameMaterial] || 'acetate';
 
   const handleAddToCart = () => {
     addItem(
@@ -79,16 +106,43 @@ export const QuickViewModal = ({
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Left: Image Showcase */}
-          <div className="relative aspect-square md:aspect-auto md:h-full bg-obsidian-50 p-6 flex items-center justify-center">
-            <div className="relative w-full h-full min-h-[280px]">
-              <Image
-                src={activeColor.image}
-                alt={`${product.name} in ${activeColor.name}`}
-                fill
-                className="object-contain p-4"
-              />
-            </div>
+          {/* Left: 3D Viewer / Image Showcase */}
+          <div className="relative aspect-square md:aspect-auto md:h-full bg-obsidian-50 flex items-center justify-center overflow-hidden">
+            {view3D ? (
+              <Suspense
+                fallback={
+                  <div className="w-full h-full flex items-center justify-center text-obsidian-400 text-xs">
+                    Loading 3D...
+                  </div>
+                }
+              >
+                <div className="w-full h-full min-h-[280px]">
+                  <LazyCanvas
+                    eager
+                    bgColor="#F7F7F7"
+                    fov={35}
+                    cameraPosition={[0, 0.2, 4]}
+                  >
+                    <QuickView3DScene
+                      frameStyle={frameStyle}
+                      frameMaterial={frameMaterial}
+                      frameColor={activeColor.hex}
+                      productName={product.name}
+                      features={product.features}
+                    />
+                  </LazyCanvas>
+                </div>
+              </Suspense>
+            ) : (
+              <div className="relative w-full h-full min-h-[280px]">
+                <Image
+                  src={activeColor.image}
+                  alt={`${product.name} in ${activeColor.name}`}
+                  fill
+                  className="object-contain p-4"
+                />
+              </div>
+            )}
 
             {/* Badges */}
             <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
@@ -102,6 +156,32 @@ export const QuickViewModal = ({
                   {discountPercent}% Off
                 </span>
               )}
+            </div>
+
+            {/* 3D / Image toggle */}
+            <div className="absolute bottom-4 left-4 flex items-center gap-2 z-10">
+              <button
+                type="button"
+                onClick={() => setView3D(true)}
+                className={`text-[10px] px-3 py-1.5 rounded-lg font-semibold uppercase tracking-wider transition-all ${
+                  view3D
+                    ? 'bg-obsidian-950 text-white shadow-sm'
+                    : 'bg-white/80 backdrop-blur-sm text-obsidian-700 border border-obsidian-200'
+                }`}
+              >
+                3D View
+              </button>
+              <button
+                type="button"
+                onClick={() => setView3D(false)}
+                className={`text-[10px] px-3 py-1.5 rounded-lg font-semibold uppercase tracking-wider transition-all ${
+                  !view3D
+                    ? 'bg-obsidian-950 text-white shadow-sm'
+                    : 'bg-white/80 backdrop-blur-sm text-obsidian-700 border border-obsidian-200'
+                }`}
+              >
+                Photo
+              </button>
             </div>
           </div>
 

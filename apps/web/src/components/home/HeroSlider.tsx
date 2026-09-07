@@ -1,16 +1,48 @@
 'use client';
 
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Camera, ShieldCheck, Award, Eye } from 'lucide-react';
 import { heroHeadline, heroSubheadline, heroCta } from '@/lib/motion/variants';
 
+// Lazy-load the 3D components to avoid loading Three.js on initial bundle
+const LazyCanvas = lazy(() => import('@/components/3d/LazyCanvas'));
+const HeroScene = lazy(() => import('@/components/3d/HeroScene'));
+
 export const HeroSlider = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [is3DReady, setIs3DReady] = useState(false);
+
+  // Hydrate the 3D canvas after mount
+  useEffect(() => {
+    setIs3DReady(true);
+  }, []);
+
+  // Scroll progress for the hero-to-next-section transition
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const sectionHeight = sectionRef.current.offsetHeight;
+      // Progress: 0 when section top is at viewport top, 1 when bottom reaches viewport top
+      const progress = Math.max(0, Math.min(1, -rect.top / sectionHeight));
+      setScrollProgress(progress);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="relative min-h-[85vh] lg:min-h-[92vh] flex items-center bg-obsidian-950 text-white overflow-hidden">
-      {/* Background Hero Image */}
+    <section
+      ref={sectionRef}
+      className="relative min-h-[85vh] lg:min-h-[92vh] flex items-center bg-obsidian-950 text-white overflow-hidden"
+    >
+      {/* Background: 3D Canvas on desktop, static image fallback */}
       <div className="absolute inset-0 z-0">
+        {/* Static image always rendered as base layer / fallback */}
         <Image
           src="/images/hero-banner.jpg"
           alt="XYZ Eyewear Master Collection"
@@ -18,6 +50,27 @@ export const HeroSlider = () => {
           priority
           className="object-cover object-center opacity-60 scale-105"
         />
+
+        {/* 3D Canvas overlay — positioned right side on large screens */}
+        {is3DReady && (
+          <Suspense fallback={null}>
+            <div className="absolute inset-0 hidden lg:block">
+              <div className="absolute right-0 top-0 w-[55%] h-full">
+                <LazyCanvas
+                  eager
+                  bgColor="transparent"
+                  fov={40}
+                  cameraPosition={[0, 0.3, 4.5]}
+                  fallbackSrc="/images/hero-banner.jpg"
+                  fallbackAlt="XYZ Eyewear 3D Product View"
+                >
+                  <HeroScene scrollProgress={scrollProgress} />
+                </LazyCanvas>
+              </div>
+            </div>
+          </Suspense>
+        )}
+
         {/* Cinematic Gradient Overlays */}
         <div className="absolute inset-0 bg-gradient-to-r from-obsidian-950 via-obsidian-950/80 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-transparent to-obsidian-950/30" />

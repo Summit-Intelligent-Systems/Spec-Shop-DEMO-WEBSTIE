@@ -1,9 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Sparkles, Glasses } from 'lucide-react';
 import { FACE_SHAPES } from '@/lib/mockData';
+
+// Lazy-load 3D components
+const LazyCanvas = lazy(() => import('@/components/3d/LazyCanvas'));
+const FaceShapeMorphScene = lazy(() => import('@/components/3d/FaceShapeMorphScene'));
+
+type FaceShapeName = 'Oval' | 'Round' | 'Square' | 'Heart' | 'Diamond';
 
 export const FaceShapeGuideTeaser = () => {
   const [selectedShape, setSelectedShape] = useState(FACE_SHAPES[0]);
@@ -97,22 +103,48 @@ export const FaceShapeGuideTeaser = () => {
             </div>
           </div>
 
-          {/* Right Column: Visual Feature Showcase */}
+          {/* Right Column: 3D Face Shape Morph Viewer */}
           <div className="lg:col-span-6">
-            <div className="relative rounded-3xl overflow-hidden bg-obsidian-950 aspect-square p-8 sm:p-12 flex flex-col justify-between text-white shadow-2xl">
-              <div className="space-y-2 relative z-10">
+            <div className="relative rounded-3xl overflow-hidden bg-obsidian-950 aspect-square shadow-2xl">
+              {/* 3D Canvas — morphing head model */}
+              <Suspense
+                fallback={
+                  <div className="w-full h-full flex flex-col justify-between p-8 sm:p-12">
+                    <div className="space-y-2 relative z-10">
+                      <span className="text-[10px] uppercase font-bold tracking-widest text-gold">
+                        Loading 3D Viewer...
+                      </span>
+                    </div>
+                  </div>
+                }
+              >
+                <div className="absolute inset-0">
+                  <LazyCanvas
+                    bgColor="#050505"
+                    fov={35}
+                    cameraPosition={[1.2, 0.3, 3.5]}
+                    fallbackSrc="/images/hero-banner.jpg"
+                    fallbackAlt="Face shape guide"
+                  >
+                    <FaceShapeMorphScene
+                      selectedShape={selectedShape.shape as FaceShapeName}
+                    />
+                  </LazyCanvas>
+                </div>
+              </Suspense>
+
+              {/* Text overlay on the 3D canvas */}
+              <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-10 pointer-events-none">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-gold">
-                  Instant Virtual Fitting
+                  Live 3D Morph Preview
                 </span>
-                <h3 className="font-serif text-3xl sm:text-4xl text-white font-light">
-                  See frames live on your face in real-time 3D.
+                <h3 className="font-serif text-xl sm:text-2xl text-white font-light mt-1">
+                  {selectedShape.shape} Face Shape
                 </h3>
-                <p className="text-xs sm:text-sm text-obsidian-300 font-light max-w-sm pt-1">
-                  Our browser-based camera fitting tool calculates your pupil distance (PD) and fits digital scale-accurate frames instantaneously.
-                </p>
               </div>
 
-              <div className="relative z-10 pt-8">
+              {/* Bottom overlay — CTA */}
+              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-10">
                 <Link
                   href="/try-on"
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gold hover:bg-gold-400 text-obsidian-950 text-xs font-semibold uppercase tracking-wider transition-all shadow-gold"
@@ -122,8 +154,8 @@ export const FaceShapeGuideTeaser = () => {
                 </Link>
               </div>
 
-              {/* Decorative Geometric Face Contours SVG */}
-              <div className="absolute -bottom-10 -right-10 w-96 h-96 opacity-20 pointer-events-none">
+              {/* Decorative Geometric Face Contours SVG — subtle behind 3D */}
+              <div className="absolute -bottom-10 -right-10 w-96 h-96 opacity-10 pointer-events-none z-0">
                 <svg viewBox="0 0 200 200" className="w-full h-full stroke-gold fill-none" strokeWidth="0.75">
                   <ellipse cx="100" cy="100" rx="60" ry="85" />
                   <ellipse cx="100" cy="90" rx="35" ry="18" />

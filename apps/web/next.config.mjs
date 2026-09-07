@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ─── Transpile Packages ─────────────────────────────────────────────────────
+  transpilePackages: ['three'],
+
   // ─── Experimental ────────────────────────────────────────────────────────────
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', 'swiper'],
