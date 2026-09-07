@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Camera, Sparkles, ShieldCheck, Award } from 'lucide-react';
+import { ArrowRight, Camera, ShieldCheck, Award, Eye } from 'lucide-react';
 import { heroHeadline, heroSubheadline, heroCta } from '@/lib/motion/variants';
 
 export const HeroSlider = () => {
@@ -94,7 +94,7 @@ export const HeroSlider = () => {
               <span>1-Year Warranty</span>
             </div>
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-gold shrink-0" />
+              <Eye className="w-4 h-4 text-gold shrink-0" />
               <span>Free 20-Step Eye Test</span>
             </div>
           </div>
