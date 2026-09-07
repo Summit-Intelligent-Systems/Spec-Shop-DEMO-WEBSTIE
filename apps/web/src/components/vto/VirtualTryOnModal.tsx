@@ -9,7 +9,11 @@ import {
   Sparkles,
   SplitSquareVertical,
   ShoppingBag,
-  VideoOff,
+  Upload,
+  User,
+  AlertCircle,
+  RefreshCw,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { MOCK_PRODUCTS, type ProductItem } from '@/lib/mockData';
 import { useCartStore } from '@/lib/store/cartStore';
@@ -36,17 +40,21 @@ export const VirtualTryOnModal = ({
   const [comparisonProduct, setComparisonProduct] = useState<ProductItem | null>(null);
   const [isCompareMode, setIsCompareMode] = useState(false);
 
-  // Mode: 'camera' | 'model'
-  const [streamMode, setStreamMode] = useState<'camera' | 'model'>('model');
+  // Mode: 'camera' | 'upload' | 'model'
+  const [streamMode, setStreamMode] = useState<'camera' | 'upload' | 'model'>('model');
   const [selectedModel, setSelectedModel] = useState(MODEL_FACES[0]);
+  const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
 
   // Adjustments
   const [frameScale, setFrameScale] = useState(100); // 80 to 130%
   const [verticalOffset, setVerticalOffset] = useState(0); // -40 to 40 px
   const [horizontalOffset, setHorizontalOffset] = useState(0); // -30 to 30 px
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [isStartingCamera, setIsStartingCamera] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraStreamRef = useRef<MediaStream | null>(null);
   const { addItem, openCart } = useCartStore();
 
   useEffect(() => {
@@ -58,30 +66,87 @@ export const VirtualTryOnModal = ({
   // Webcam init
   const startCamera = async () => {
     setCameraError(null);
+    setIsStartingCamera(true);
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Webcam not supported in this browser environment');
+      if (typeof window === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera access is not supported by your browser or environment. You can upload a photo instead.');
       }
+
+      // Stop any existing stream
+      stopCamera();
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
       });
+
+      cameraStreamRef.current = stream;
+      setStreamMode('camera');
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
+        await videoRef.current.play().catch(() => {});
       }
-      setStreamMode('camera');
     } catch (err: any) {
-      setCameraError(err.message || 'Unable to access camera. Please allow camera permissions or use our studio models.');
-      setStreamMode('model');
+      console.warn('Camera request error:', err);
+      const isDenied =
+        err.name === 'NotAllowedError' ||
+        err.name === 'PermissionDeniedError' ||
+        err.message?.toLowerCase().includes('denied') ||
+        err.message?.toLowerCase().includes('not allowed');
+
+      if (isDenied) {
+        setCameraError(
+          'Camera permission was denied. To enable it, click the lock 🔒 or camera 📷 icon in your browser address bar and set Camera to "Allow", then click Retry. Or upload a photo below.',
+        );
+      } else if (err.name === 'NotFoundError') {
+        setCameraError('No webcam was detected on this device. Please upload a photo or use studio models.');
+      } else {
+        setCameraError(err.message || 'Unable to access camera. Please allow camera permissions or upload a photo.');
+      }
+    } finally {
+      setIsStartingCamera(false);
     }
   };
 
   const stopCamera = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach((track) => track.stop());
+    if (cameraStreamRef.current) {
+      cameraStreamRef.current.getTracks().forEach((track) => track.stop());
+      cameraStreamRef.current = null;
+    }
+    if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
+  };
+
+  // Attach stream whenever videoRef and cameraStreamRef exist and in camera mode
+  useEffect(() => {
+    if (streamMode === 'camera' && cameraStreamRef.current && videoRef.current) {
+      videoRef.current.srcObject = cameraStreamRef.current;
+      videoRef.current.play().catch(() => {});
+    }
+  }, [streamMode]);
+
+  // Photo upload handler
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file (JPG, PNG, WEBP)');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setUploadedPhoto(dataUrl);
+        stopCamera();
+        setStreamMode('upload');
+        setCameraError(null);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   useEffect(() => {
@@ -175,18 +240,58 @@ export const VirtualTryOnModal = ({
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Main Stage Canvas (Col 8) */}
           <div className="lg:col-span-8 flex flex-col gap-4">
-            {/* Camera / Model Canvas Stage */}
+            {/* Camera / Model / Photo Canvas Stage */}
             <div className="relative aspect-[4/3] bg-obsidian-950 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center border border-obsidian-800">
-              {/* Webcam Video Stream */}
-              {streamMode === 'camera' ? (
-                <video
-                  ref={videoRef}
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover -scale-x-100"
-                />
-              ) : (
-                /* Studio Model Face Image */
+              {/* Webcam Video Stream - always mounted so ref is never null */}
+              <video
+                ref={videoRef}
+                playsInline
+                muted
+                className={`w-full h-full object-cover -scale-x-100 ${
+                  streamMode === 'camera' ? 'block' : 'hidden'
+                }`}
+              />
+
+              {/* Uploaded User Photo */}
+              {streamMode === 'upload' && uploadedPhoto && (
+                <div className="relative w-full h-full flex items-center justify-center bg-obsidian-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={uploadedPhoto}
+                    alt="Your portrait"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              )}
+
+              {/* Upload Prompt if in upload mode but no photo selected yet */}
+              {streamMode === 'upload' && !uploadedPhoto && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-obsidian-900/95 z-20">
+                  <div className="w-16 h-16 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center text-gold mb-4 shadow-gold">
+                    <Upload className="w-8 h-8" />
+                  </div>
+                  <h4 className="font-serif text-xl font-medium text-white mb-2">
+                    Upload Your Photo
+                  </h4>
+                  <p className="text-xs text-obsidian-300 max-w-sm mb-6 leading-relaxed">
+                    Upload a straight-facing selfie or portrait from your phone or computer to try frames directly on your own face.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gold hover:bg-gold-400 text-obsidian-950 text-xs font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span>Choose Photo from Device</span>
+                  </button>
+                  <span className="text-[10px] text-obsidian-400 mt-4">
+                    JPG, PNG, WEBP • Processed locally in your browser
+                  </span>
+                </div>
+              )}
+
+              {/* Studio Model Face Image */}
+              {streamMode === 'model' && (
                 <Image
                   src={selectedModel.image}
                   alt={selectedModel.name}
@@ -196,78 +301,80 @@ export const VirtualTryOnModal = ({
               )}
 
               {/* Single Frame Overlay OR Dual Frame Split View */}
-              {!isCompareMode ? (
-                <div
-                  className="absolute pointer-events-none transition-all duration-75 drop-shadow-2xl"
-                  style={{
-                    width: `${54 * (frameScale / 100)}%`,
-                    top: `calc(38% + ${verticalOffset}px)`,
-                    left: `calc(50% + ${horizontalOffset}px)`,
-                    transform: 'translate(-50%, -50%)',
-                  }}
-                >
-                  <Image
-                    src={selectedProduct.colors[0].image}
-                    alt={selectedProduct.name}
-                    width={400}
-                    height={200}
-                    className="w-full object-contain filter drop-shadow-xl"
-                  />
-                </div>
-              ) : (
-                /* Split Comparison Overlay */
-                <div className="absolute inset-0 grid grid-cols-2 divide-x-2 divide-white/60 pointer-events-none">
-                  {/* Left Side: Frame A */}
-                  <div className="relative h-full">
-                    <div
-                      className="absolute transition-all drop-shadow-2xl"
-                      style={{
-                        width: `${75 * (frameScale / 100)}%`,
-                        top: `calc(38% + ${verticalOffset}px)`,
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                      }}
-                    >
-                      <Image
-                        src={selectedProduct.colors[0].image}
-                        alt={selectedProduct.name}
-                        width={300}
-                        height={150}
-                        className="w-full object-contain"
-                      />
-                    </div>
-                    <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-white font-semibold">
-                      A: {selectedProduct.name}
-                    </div>
+              {!(streamMode === 'upload' && !uploadedPhoto) && (
+                !isCompareMode ? (
+                  <div
+                    className="absolute pointer-events-none transition-all duration-75 drop-shadow-2xl"
+                    style={{
+                      width: `${54 * (frameScale / 100)}%`,
+                      top: `calc(38% + ${verticalOffset}px)`,
+                      left: `calc(50% + ${horizontalOffset}px)`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    <Image
+                      src={selectedProduct.colors[0].image}
+                      alt={selectedProduct.name}
+                      width={400}
+                      height={200}
+                      className="w-full object-contain filter drop-shadow-xl"
+                    />
                   </div>
+                ) : (
+                  /* Split Comparison Overlay */
+                  <div className="absolute inset-0 grid grid-cols-2 divide-x-2 divide-white/60 pointer-events-none">
+                    {/* Left Side: Frame A */}
+                    <div className="relative h-full">
+                      <div
+                        className="absolute transition-all drop-shadow-2xl"
+                        style={{
+                          width: `${75 * (frameScale / 100)}%`,
+                          top: `calc(38% + ${verticalOffset}px)`,
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      >
+                        <Image
+                          src={selectedProduct.colors[0].image}
+                          alt={selectedProduct.name}
+                          width={300}
+                          height={150}
+                          className="w-full object-contain"
+                        />
+                      </div>
+                      <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-white font-semibold">
+                        A: {selectedProduct.name}
+                      </div>
+                    </div>
 
-                  {/* Right Side: Frame B */}
-                  <div className="relative h-full">
-                    <div
-                      className="absolute transition-all drop-shadow-2xl"
-                      style={{
-                        width: `${75 * (frameScale / 100)}%`,
-                        top: `calc(38% + ${verticalOffset}px)`,
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                      }}
-                    >
-                      <Image
-                        src={comparisonProduct?.colors[0].image || selectedProduct.colors[0].image}
-                        alt={comparisonProduct?.name || ''}
-                        width={300}
-                        height={150}
-                        className="w-full object-contain"
-                      />
-                    </div>
-                    <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-white font-semibold">
-                      B: {comparisonProduct?.name}
+                    {/* Right Side: Frame B */}
+                    <div className="relative h-full">
+                      <div
+                        className="absolute transition-all drop-shadow-2xl"
+                        style={{
+                          width: `${75 * (frameScale / 100)}%`,
+                          top: `calc(38% + ${verticalOffset}px)`,
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      >
+                        <Image
+                          src={comparisonProduct?.colors[0].image || selectedProduct.colors[0].image}
+                          alt={comparisonProduct?.name || ''}
+                          width={300}
+                          height={150}
+                          className="w-full object-contain"
+                        />
+                      </div>
+                      <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-white font-semibold">
+                        B: {comparisonProduct?.name}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )
               )}
 
-              {/* Live Overlay Badge */}
+              {/* Status Overlay Badge */}
               <div className="absolute top-3 left-3 flex items-center gap-2">
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-black/60 text-white backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
                   <Sparkles className="w-3 h-3 text-gold" />
@@ -276,89 +383,178 @@ export const VirtualTryOnModal = ({
                 {streamMode === 'camera' && (
                   <span className="flex items-center gap-1 text-[10px] font-semibold bg-red-600 text-white px-2 py-0.5 rounded-full">
                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                    LIVE
+                    LIVE CAMERA
+                  </span>
+                )}
+                {streamMode === 'upload' && uploadedPhoto && (
+                  <span className="flex items-center gap-1 text-[10px] font-semibold bg-gold-600 text-obsidian-950 px-2 py-0.5 rounded-full">
+                    YOUR PHOTO
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Mirror Controls Bar */}
-            <div className="bg-obsidian-50 p-4 rounded-2xl border border-obsidian-200 flex flex-wrap items-center justify-between gap-4 text-xs">
-              <div className="flex items-center gap-2">
-                {streamMode === 'model' ? (
+            {/* Hidden File Input for Photo Upload */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePhotoUpload}
+            />
+
+            {/* Mode Switcher Tabs */}
+            <div className="bg-obsidian-50 p-2 rounded-2xl border border-obsidian-200 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-1 p-1 bg-white rounded-xl border border-obsidian-200/80 shadow-2xs">
+                {/* Mode 1: Camera */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    startCamera();
+                  }}
+                  disabled={isStartingCamera}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    streamMode === 'camera'
+                      ? 'bg-obsidian-950 text-white shadow-xs'
+                      : 'text-obsidian-700 hover:text-obsidian-950 hover:bg-obsidian-50'
+                  }`}
+                >
+                  <Camera className="w-3.5 h-3.5 text-gold" />
+                  <span>{isStartingCamera ? 'Connecting...' : 'Live Camera'}</span>
+                </button>
+
+                {/* Mode 2: Photo Upload */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    stopCamera();
+                    setStreamMode('upload');
+                    setCameraError(null);
+                    if (!uploadedPhoto) {
+                      fileInputRef.current?.click();
+                    }
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    streamMode === 'upload'
+                      ? 'bg-obsidian-950 text-white shadow-xs'
+                      : 'text-obsidian-700 hover:text-obsidian-950 hover:bg-obsidian-50'
+                  }`}
+                >
+                  <Upload className="w-3.5 h-3.5 text-gold" />
+                  <span>{uploadedPhoto ? 'Your Photo' : 'Upload Photo'}</span>
+                </button>
+
+                {/* Mode 3: Studio Models */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    stopCamera();
+                    setStreamMode('model');
+                    setCameraError(null);
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    streamMode === 'model'
+                      ? 'bg-obsidian-950 text-white shadow-xs'
+                      : 'text-obsidian-700 hover:text-obsidian-950 hover:bg-obsidian-50'
+                  }`}
+                >
+                  <User className="w-3.5 h-3.5" />
+                  <span>Studio Models</span>
+                </button>
+              </div>
+
+              {/* Photo Change Button if in upload mode */}
+              {streamMode === 'upload' && uploadedPhoto && (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-obsidian-800 bg-obsidian-200/70 hover:bg-obsidian-300 transition-colors"
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>Change Photo</span>
+                </button>
+              )}
+
+              {/* Frame Scale & Position Controls */}
+              <div className="flex items-center gap-4 text-xs">
+                {/* Scale Slider */}
+                <div className="flex items-center gap-2">
+                  <span className="text-obsidian-500 font-medium">Scale:</span>
+                  <input
+                    type="range"
+                    min={80}
+                    max={125}
+                    value={frameScale}
+                    onChange={(e) => setFrameScale(Number(e.target.value))}
+                    className="w-20 h-1.5 bg-obsidian-300 rounded-lg appearance-none cursor-pointer accent-obsidian-950"
+                  />
+                  <span className="font-mono text-obsidian-700 w-7">{frameScale}%</span>
+                </div>
+
+                {/* Vertical Position */}
+                <div className="flex items-center gap-2">
+                  <span className="text-obsidian-500 font-medium">Bridge:</span>
+                  <input
+                    type="range"
+                    min={-30}
+                    max={30}
+                    value={verticalOffset}
+                    onChange={(e) => setVerticalOffset(Number(e.target.value))}
+                    className="w-20 h-1.5 bg-obsidian-300 rounded-lg appearance-none cursor-pointer accent-obsidian-950"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFrameScale(100);
+                      setVerticalOffset(0);
+                      setHorizontalOffset(0);
+                    }}
+                    className="p-1 text-obsidian-400 hover:text-obsidian-950 transition-colors"
+                    title="Reset position"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Camera Error / Permission Instructions */}
+            {cameraError && (
+              <div className="p-3.5 bg-amber-50/90 text-amber-950 rounded-2xl text-xs border border-amber-200 shadow-2xs space-y-2">
+                <div className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">{cameraError}</p>
+                </div>
+                <div className="flex items-center gap-2.5 pl-6 pt-1">
                   <button
                     type="button"
                     onClick={startCamera}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-obsidian-950 text-white font-semibold hover:bg-obsidian-800 transition-colors shadow-xs"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-200 hover:bg-amber-300 text-amber-950 font-semibold text-xs transition-colors"
                   >
-                    <Camera className="w-4 h-4 text-gold" />
-                    <span>Switch to Live Camera</span>
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Try Camera Again</span>
                   </button>
-                ) : (
                   <button
                     type="button"
                     onClick={() => {
                       stopCamera();
-                      setStreamMode('model');
+                      setStreamMode('upload');
+                      setCameraError(null);
+                      fileInputRef.current?.click();
                     }}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-obsidian-200 text-obsidian-900 font-semibold hover:bg-obsidian-300 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian-950 hover:bg-obsidian-800 text-white font-semibold text-xs transition-colors"
                   >
-                    <VideoOff className="w-4 h-4" />
-                    <span>Use Studio Models</span>
+                    <Upload className="w-3.5 h-3.5 text-gold" />
+                    <span>Upload a Photo Instead</span>
                   </button>
-                )}
-              </div>
-
-              {/* Scale Slider */}
-              <div className="flex items-center gap-3">
-                <span className="text-obsidian-500 font-medium">Scale:</span>
-                <input
-                  type="range"
-                  min={80}
-                  max={125}
-                  value={frameScale}
-                  onChange={(e) => setFrameScale(Number(e.target.value))}
-                  className="w-24 h-1.5 bg-obsidian-300 rounded-lg appearance-none cursor-pointer accent-obsidian-950"
-                />
-                <span className="font-mono text-obsidian-700 w-8">{frameScale}%</span>
-              </div>
-
-              {/* Vertical Position */}
-              <div className="flex items-center gap-3">
-                <span className="text-obsidian-500 font-medium">Vertical:</span>
-                <input
-                  type="range"
-                  min={-30}
-                  max={30}
-                  value={verticalOffset}
-                  onChange={(e) => setVerticalOffset(Number(e.target.value))}
-                  className="w-24 h-1.5 bg-obsidian-300 rounded-lg appearance-none cursor-pointer accent-obsidian-950"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFrameScale(100);
-                    setVerticalOffset(0);
-                    setHorizontalOffset(0);
-                  }}
-                  className="text-obsidian-500 hover:text-obsidian-950"
-                  title="Reset alignment"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {cameraError && (
-              <div className="p-3 bg-amber-50 text-amber-900 rounded-xl text-xs border border-amber-200">
-                {cameraError}
+                </div>
               </div>
             )}
           </div>
 
           {/* Controls & Catalog Carousel (Col 4) */}
           <div className="lg:col-span-4 space-y-5">
-            {/* Model Selector (when in model mode) */}
+            {/* Mode-Specific Context Panel */}
             {streamMode === 'model' && (
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-obsidian-500">
@@ -386,6 +582,48 @@ export const VirtualTryOnModal = ({
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {streamMode === 'upload' && (
+              <div className="p-3.5 bg-obsidian-50 rounded-2xl border border-obsidian-200 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-obsidian-600">
+                    Photo Try-On Mode
+                  </span>
+                  {uploadedPhoto && (
+                    <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                      Photo Loaded
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-obsidian-500 leading-relaxed">
+                  {uploadedPhoto
+                    ? 'Adjust the scale and bridge sliders to fine-tune the glasses alignment on your face.'
+                    : 'Select a front-facing selfie to preview all frames with accurate scale and styling.'}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full py-2.5 rounded-xl border border-obsidian-300 hover:border-obsidian-950 bg-white text-xs font-semibold text-obsidian-900 flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Upload className="w-3.5 h-3.5 text-gold" />
+                  <span>{uploadedPhoto ? 'Upload Another Photo' : 'Upload Your Selfie'}</span>
+                </button>
+              </div>
+            )}
+
+            {streamMode === 'camera' && (
+              <div className="p-3.5 bg-obsidian-50 rounded-2xl border border-obsidian-200 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-obsidian-700">
+                    Live Mirror Stream
+                  </span>
+                </div>
+                <p className="text-xs text-obsidian-500 leading-relaxed">
+                  Look straight into your camera. Use the <strong>Scale</strong> and <strong>Bridge</strong> sliders to match your pupillary distance (PD) and nose height.
+                </p>
               </div>
             )}
 
