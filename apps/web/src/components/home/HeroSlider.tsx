@@ -26,6 +26,16 @@ export const HeroSlider = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 w-full">
         <div className="max-w-2xl space-y-8">
 
+          {/* Eyebrow badge */}
+          <motion.div
+            variants={heroSubheadline}
+            initial="hidden"
+            animate="visible"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs font-semibold uppercase tracking-widest"
+          >
+            <span>Autumn / Winter 2026 Collection</span>
+          </motion.div>
+
           {/* Main Headline */}
           <motion.h1
             variants={heroHeadline}

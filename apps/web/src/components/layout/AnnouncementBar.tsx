@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const ANNOUNCEMENTS = [
@@ -40,7 +40,6 @@ export const AnnouncementBar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left perk */}
         <div className="hidden lg:flex items-center gap-1.5 text-obsidian-400">
-          <Sparkles className="w-3.5 h-3.5 text-gold" />
           <span>Handcrafted Luxury Eyewear</span>
         </div>
 

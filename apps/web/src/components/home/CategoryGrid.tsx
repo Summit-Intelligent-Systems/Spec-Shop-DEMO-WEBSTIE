@@ -10,7 +10,7 @@ const CATEGORY_CARDS = [
     subtitle: 'Mazzucchelli Italian Acetate & Prescription Optics',
     link: '/shop/eyeglasses',
     image: '/images/hero-banner.jpg',
-    colSpan: 'md:col-span-8',
+    colSpan: 'md:col-span-6',
     count: '64 Styles',
   },
   {
@@ -18,7 +18,7 @@ const CATEGORY_CARDS = [
     subtitle: '100% UV400 Polarized Runway Silhouettes',
     link: '/shop/sunglasses',
     image: '/images/category-sunglasses.jpg',
-    colSpan: 'md:col-span-4',
+    colSpan: 'md:col-span-6',
     count: '42 Styles',
   },
   {
@@ -26,7 +26,7 @@ const CATEGORY_CARDS = [
     subtitle: 'Zero Power Blue-Light Cutoff for Computer Fatigue',
     link: '/shop/screen-glasses',
     image: '/images/category-men.jpg',
-    colSpan: 'md:col-span-4',
+    colSpan: 'md:col-span-6',
     count: '28 Styles',
   },
   {
@@ -34,10 +34,11 @@ const CATEGORY_CARDS = [
     subtitle: 'Ultralight Grade-5 Titanium Under 12 Grams',
     link: '/shop/eyeglasses?material=TITANIUM',
     image: '/images/product-craft.jpg',
-    colSpan: 'md:col-span-8',
+    colSpan: 'md:col-span-6',
     count: '36 Styles',
   },
 ];
+
 
 export const CategoryGrid = () => {
   return (
