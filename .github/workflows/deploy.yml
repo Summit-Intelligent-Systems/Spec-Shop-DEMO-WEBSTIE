@@ -22,9 +22,10 @@ jobs:
 
       - name: Pull latest Docker images
         run: |
+          IMAGE_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker pull ghcr.io/${{ github.repository }}/api:${{ github.sha }}
-          docker pull ghcr.io/${{ github.repository }}/web:${{ github.sha }}
+          docker pull ghcr.io/$IMAGE_REPO/api:${{ github.sha }}
+          docker pull ghcr.io/$IMAGE_REPO/web:${{ github.sha }}
 
       - name: Deploy to staging server
         uses: appleboy/ssh-action@v1
