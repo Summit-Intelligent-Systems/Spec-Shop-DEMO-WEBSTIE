@@ -51,6 +51,7 @@ export const VirtualTryOnModal = ({
   const [horizontalOffset, setHorizontalOffset] = useState(0); // -30 to 30 px
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isStartingCamera, setIsStartingCamera] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,14 +73,25 @@ export const VirtualTryOnModal = ({
         throw new Error('Camera access is not supported by your browser or environment. You can upload a photo instead.');
       }
 
-      // Stop any existing stream
+      // Stop any existing stream first
       stopCamera();
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
-      });
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+        });
+      } catch (firstErr: any) {
+        // If ideal constraints failed, fallback to simplest video request
+        if (firstErr.name === 'OverconstrainedError' || firstErr.name === 'ConstraintNotSatisfiedError') {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        } else {
+          throw firstErr;
+        }
+      }
 
       cameraStreamRef.current = stream;
+      setIsCameraActive(true);
       setStreamMode('camera');
 
       if (videoRef.current) {
@@ -88,6 +100,7 @@ export const VirtualTryOnModal = ({
       }
     } catch (err: any) {
       console.warn('Camera request error:', err);
+      setIsCameraActive(false);
       const isDenied =
         err.name === 'NotAllowedError' ||
         err.name === 'PermissionDeniedError' ||
@@ -96,10 +109,10 @@ export const VirtualTryOnModal = ({
 
       if (isDenied) {
         setCameraError(
-          'Camera permission was denied. To enable it, click the lock 🔒 or camera 📷 icon in your browser address bar and set Camera to "Allow", then click Retry. Or upload a photo below.',
+          'Your browser previously blocked camera access for this site. Click the lock 🔒 or sliders icon in your URL address bar, reset or allow Camera, then click "Try Again" below to see the browser prompt.',
         );
       } else if (err.name === 'NotFoundError') {
-        setCameraError('No webcam was detected on this device. Please upload a photo or use studio models.');
+        setCameraError('No camera was detected on this device. You can upload a photo or use studio models.');
       } else {
         setCameraError(err.message || 'Unable to access camera. Please allow camera permissions or upload a photo.');
       }
@@ -116,6 +129,7 @@ export const VirtualTryOnModal = ({
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
+    setIsCameraActive(false);
   };
 
   // Attach stream whenever videoRef and cameraStreamRef exist and in camera mode
@@ -290,6 +304,73 @@ export const VirtualTryOnModal = ({
                 </div>
               )}
 
+              {/* Camera Permission Invitation / Request Screen */}
+              {streamMode === 'camera' && !isCameraActive && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-obsidian-950/95 z-20">
+                  <div className="relative mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center text-gold shadow-gold">
+                      <Camera className="w-8 h-8" />
+                    </div>
+                    {isStartingCamera && (
+                      <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-obsidian-950 animate-ping" />
+                    )}
+                  </div>
+
+                  <h4 className="font-serif text-xl font-medium text-white mb-2">
+                    {cameraError ? 'Camera Access Needed' : 'Start Live Virtual Mirror'}
+                  </h4>
+
+                  <p className="text-xs text-obsidian-300 max-w-sm mb-6 leading-relaxed">
+                    {cameraError ? (
+                      <span>
+                        Your browser didn&apos;t grant camera access yet. Click below to request permission, then choose <strong className="text-gold">&quot;Allow while visiting site&quot;</strong> or <strong className="text-gold">&quot;Allow this time&quot;</strong> in your browser&apos;s popup.
+                      </span>
+                    ) : (
+                      <span>
+                        Click below to open your camera. When your browser prompts you, click <strong className="text-gold">&quot;Allow while visiting site&quot;</strong> or <strong className="text-gold">&quot;Allow this time&quot;</strong>.
+                      </span>
+                    )}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={startCamera}
+                    disabled={isStartingCamera}
+                    className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gold hover:bg-gold-400 text-obsidian-950 text-xs font-bold uppercase tracking-wider transition-all shadow-gold hover:shadow-gold-lg active:scale-95 disabled:opacity-60"
+                  >
+                    <Camera className="w-4 h-4" />
+                    <span>{isStartingCamera ? 'Prompting Browser...' : 'Allow Camera & Begin Fit'}</span>
+                  </button>
+
+                  <div className="flex items-center gap-4 mt-6 text-xs text-obsidian-400">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        stopCamera();
+                        setStreamMode('upload');
+                        setCameraError(null);
+                        fileInputRef.current?.click();
+                      }}
+                      className="hover:text-gold transition-colors underline underline-offset-4"
+                    >
+                      Upload a photo instead
+                    </button>
+                    <span>•</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        stopCamera();
+                        setStreamMode('model');
+                        setCameraError(null);
+                      }}
+                      className="hover:text-gold transition-colors underline underline-offset-4"
+                    >
+                      Use studio models
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Studio Model Face Image */}
               {streamMode === 'model' && (
                 <Image
@@ -301,7 +382,10 @@ export const VirtualTryOnModal = ({
               )}
 
               {/* Single Frame Overlay OR Dual Frame Split View */}
-              {!(streamMode === 'upload' && !uploadedPhoto) && (
+              {!(
+                (streamMode === 'upload' && !uploadedPhoto) ||
+                (streamMode === 'camera' && !isCameraActive)
+              ) && (
                 !isCompareMode ? (
                   <div
                     className="absolute pointer-events-none transition-all duration-75 drop-shadow-2xl"
