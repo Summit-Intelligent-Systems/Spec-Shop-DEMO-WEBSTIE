@@ -137,6 +137,15 @@ app.use(`${API_PREFIX}/inventory`, inventoryRouter);
 app.use(`${API_PREFIX}/payments`, paymentsRouter);
 
 // ─── API Welcome ─────────────────────────────────────────────────────────────
+app.get('/', (_req: Request, res: Response) => {
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    message: 'XYZ Eyewear API',
+    docs: `${env.API_URL}/api-docs`,
+    version: '1.0.0',
+  });
+});
+
 app.get(API_PREFIX, (_req: Request, res: Response) => {
   res.status(HTTP_STATUS.OK).json({
     success: true,
