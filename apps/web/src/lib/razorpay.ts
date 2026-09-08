@@ -16,7 +16,7 @@ export interface RazorpayOptions {
   name: string;
   description?: string;
   image?: string;
-  order_id: string;
+  order_id?: string;
   prefill?: RazorpayPrefill;
   config?: Record<string, any>;
   notes?: Record<string, string>;
@@ -34,8 +34,8 @@ export interface RazorpayOptions {
 
 export interface RazorpayPaymentResponse {
   razorpay_payment_id: string;
-  razorpay_order_id: string;
-  razorpay_signature: string;
+  razorpay_order_id?: string;
+  razorpay_signature?: string;
 }
 
 declare global {
@@ -62,10 +62,15 @@ export const loadRazorpayScript = (): Promise<boolean> => {
       return;
     }
 
-    const existingScript = document.getElementById('razorpay-checkout-script');
+    const existingScript =
+      document.getElementById('razorpay-checkout-sdk') ||
+      document.getElementById('razorpay-checkout-script');
     if (existingScript) {
       existingScript.addEventListener('load', () => resolve(true));
       existingScript.addEventListener('error', () => resolve(false));
+      if ((existingScript as any).readyState === 'complete' || window.Razorpay) {
+        resolve(true);
+      }
       return;
     }
 
@@ -101,7 +106,6 @@ export const launchRazorpayPayment = async (
     name: options.name || 'XYZ Eyewear',
     description: options.description || 'Artisanal Optical & Sunwear Order',
     image: options.image || '/favicon.ico',
-    order_id: options.order_id,
     prefill: options.prefill,
     config: options.config,
     notes: options.notes,
@@ -120,6 +124,10 @@ export const launchRazorpayPayment = async (
       options.onSuccess(response);
     },
   };
+
+  if (options.order_id && options.order_id.startsWith('order_')) {
+    rzpOptions.order_id = options.order_id;
+  }
 
   const paymentObject = new window.Razorpay(rzpOptions);
   if (options.onError) {
