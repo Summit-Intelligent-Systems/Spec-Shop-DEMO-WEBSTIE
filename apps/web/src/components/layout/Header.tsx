@@ -10,13 +10,15 @@ import { MegaMenu } from './MegaMenu';
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const { openMobileNav, openSearch, openAuthModal } = useUIStore();
   const { openCart, getItemCount } = useCartStore();
 
-  const cartCount = getItemCount();
+  const cartCount = mounted ? getItemCount() : 0;
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };

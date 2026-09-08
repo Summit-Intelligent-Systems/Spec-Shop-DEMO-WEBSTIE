@@ -5,6 +5,7 @@
  */
 
 import crypto from 'crypto';
+import Razorpay from 'razorpay';
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
 import { generateOrderNumber } from '@xyz-eyewear/utils';
@@ -75,11 +76,68 @@ class MockPaymentDriver implements PaymentDriver {
 // ─── Razorpay Driver ──────────────────────────────────────────────────────────
 
 class RazorpayDriver implements PaymentDriver {
-  // TODO Phase 8: Implement with razorpay npm package
+  private razorpayInstance: Razorpay | null = null;
+
+  private getRazorpay(): Razorpay | null {
+    if (this.razorpayInstance) return this.razorpayInstance;
+    const keyId = env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
+    const keySecret = env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_SECRET;
+    if (keyId && keySecret) {
+      try {
+        this.razorpayInstance = new Razorpay({
+          key_id: keyId,
+          key_secret: keySecret,
+        });
+        logger.info('✅ Razorpay driver initialized with credentials.');
+      } catch (err) {
+        logger.error('Failed to initialize Razorpay SDK client:', err);
+      }
+    }
+    return this.razorpayInstance;
+  }
+
   async createOrder(payload: CreateOrderPayload): Promise<PaymentOrder> {
-    logger.warn('Razorpay not configured. Falling back to mock.');
-    const mock = new MockPaymentDriver();
-    return mock.createOrder(payload);
+    const rzp = this.getRazorpay();
+    if (!rzp) {
+      logger.warn('Razorpay SDK not configured with valid API keys. Falling back to mock order.');
+      const mock = new MockPaymentDriver();
+      return mock.createOrder(payload);
+    }
+
+    try {
+      // Amount must be an integer in smallest currency unit (paise)
+      const options = {
+        amount: Math.round(payload.amount),
+        currency: payload.currency || 'INR',
+        receipt: payload.receipt || `rcpt_${generateOrderNumber()}`,
+        notes: payload.notes || {},
+      };
+
+      const order = await rzp.orders.create(options);
+
+      return {
+        id: order.id,
+        amount: Number(order.amount),
+        currency: order.currency,
+        status: order.status,
+        gatewayData: {
+          id: order.id,
+          entity: order.entity,
+          amount: order.amount,
+          amount_paid: order.amount_paid,
+          amount_due: order.amount_due,
+          currency: order.currency,
+          receipt: order.receipt,
+          status: order.status,
+          attempts: order.attempts,
+          notes: order.notes,
+          created_at: order.created_at,
+        },
+      };
+    } catch (error: any) {
+      logger.error('Error creating Razorpay order:', error);
+      throw new Error(error?.error?.description || error?.message || 'Failed to create Razorpay order');
+    }
   }
 
   async verifyPayment(payload: VerifyPaymentPayload): Promise<boolean> {
@@ -87,20 +145,49 @@ class RazorpayDriver implements PaymentDriver {
       logger.warn('RAZORPAY_KEY_SECRET not set, using mock verification');
       return true;
     }
-    // HMAC-SHA256 signature verification
-    const generated = crypto
-      .createHmac('sha256', env.RAZORPAY_KEY_SECRET)
-      .update(`${payload.gatewayOrderId}|${payload.gatewayPaymentId}`)
-      .digest('hex');
-    return generated === payload.signature;
+    try {
+      // HMAC-SHA256 signature verification: order_id + "|" + payment_id
+      const body = `${payload.gatewayOrderId}|${payload.gatewayPaymentId}`;
+      const expectedSignature = crypto
+        .createHmac('sha256', env.RAZORPAY_KEY_SECRET)
+        .update(body.toString())
+        .digest('hex');
+
+      const isValid = expectedSignature === payload.signature;
+      if (!isValid) {
+        logger.warn('Razorpay signature mismatch', {
+          gatewayOrderId: payload.gatewayOrderId,
+          gatewayPaymentId: payload.gatewayPaymentId,
+        });
+      }
+      return isValid;
+    } catch (err) {
+      logger.error('Razorpay signature verification error:', err);
+      return false;
+    }
   }
 
   async refundPayment(
     paymentId: string,
-    _amount?: number,
+    amount?: number,
   ): Promise<{ success: boolean; refundId?: string }> {
-    logger.warn(`Razorpay refund not fully implemented for: ${paymentId}`);
-    return { success: false };
+    if (!this.razorpayInstance) {
+      logger.warn(`Razorpay not configured. Mock refund for: ${paymentId}`);
+      return { success: true, refundId: `mock_refund_${Date.now()}` };
+    }
+
+    try {
+      const refundOptions: any = {};
+      if (amount) {
+        refundOptions.amount = Math.round(amount);
+      }
+
+      const refund = await this.razorpayInstance.payments.refund(paymentId, refundOptions);
+      return { success: true, refundId: refund.id };
+    } catch (err: any) {
+      logger.error(`Failed to process Razorpay refund for ${paymentId}:`, err);
+      return { success: false };
+    }
   }
 }
 

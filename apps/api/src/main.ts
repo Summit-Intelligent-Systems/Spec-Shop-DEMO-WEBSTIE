@@ -20,11 +20,14 @@ async function bootstrap() {
 
     // Test Redis connection
     try {
-      await redis.connect();
-      logger.info('✅ Redis connected');
+      if (env.REDIS_URL && env.NODE_ENV !== 'development') {
+        await redis.connect();
+        logger.info('✅ Redis connected');
+      } else {
+        logger.info('ℹ️ Dev mode: Redis connection skipped (in-memory caching active)');
+      }
     } catch {
       logger.warn('⚠️ Redis offline. Rate limiting using in-memory store.');
-      redis.disconnect(false);
     }
 
     const server = app.listen(PORT, () => {

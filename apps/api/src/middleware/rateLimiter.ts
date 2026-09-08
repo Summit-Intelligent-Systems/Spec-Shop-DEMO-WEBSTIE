@@ -26,11 +26,15 @@ const createLimiter = (options: {
       return `rl:${prefix}:${userId ?? req.ip}`;
     },
     passOnStoreError: true,
-    store: new RedisStore({
-      // @ts-expect-error - Type mismatch between versions but works correctly
-      sendCommand: (...args: string[]) => redis.call(...args),
-      prefix: `xyz:rl:${options.keyPrefix || 'global'}:`,
-    }),
+    ...(env.NODE_ENV === 'production'
+      ? {
+          store: new RedisStore({
+            // @ts-expect-error - Type mismatch between versions but works correctly
+            sendCommand: (...args: string[]) => redis.call(...args),
+            prefix: `xyz:rl:${options.keyPrefix || 'global'}:`,
+          }),
+        }
+      : {}),
     handler: (_req, _res, next) => {
       next(new RateLimitError(options.message));
     },

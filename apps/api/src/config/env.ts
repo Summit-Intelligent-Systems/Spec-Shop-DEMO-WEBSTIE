@@ -1,4 +1,13 @@
+import path from 'path';
+import dotenv from 'dotenv';
 import { z } from 'zod';
+
+// Load .env from multiple potential monorepo root paths
+dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 /**
  * Zod-validated environment configuration.

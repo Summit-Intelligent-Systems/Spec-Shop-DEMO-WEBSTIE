@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Cormorant_Garamond, Inter, JetBrains_Mono } from 'next/font/google';
 import { APP, SEO_DEFAULTS } from '@xyz-eyewear/config';
 import { Providers } from './providers';
@@ -169,6 +170,11 @@ export default function RootLayout({
           </div>
           <Footer />
         </Providers>
+        <Script
+          id="razorpay-checkout-sdk"
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

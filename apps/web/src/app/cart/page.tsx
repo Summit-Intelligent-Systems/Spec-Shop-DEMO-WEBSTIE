@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -21,7 +21,12 @@ import toast from 'react-hot-toast';
 import { useCartStore } from '@/lib/store/cartStore';
 
 export default function CartPage() {
+  const [mounted, setMounted] = useState(false);
   const { cart, removeItem, updateQuantity, clearCart } = useCartStore();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [couponInput, setCouponInput] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0);
   const [couponCode, setCouponCode] = useState<string>('');
@@ -60,6 +65,15 @@ export default function CartPage() {
     setCouponCode('');
     setCouponInput('');
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-[70vh] bg-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-8 h-8 border-2 border-obsidian-200 border-t-gold rounded-full animate-spin mb-4" />
+        <p className="text-xs text-obsidian-500 font-medium">Loading your optical bag...</p>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

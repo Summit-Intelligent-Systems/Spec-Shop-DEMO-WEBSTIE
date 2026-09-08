@@ -4,18 +4,17 @@ import { logger } from './logger';
 
 export const redis = new Redis(env.REDIS_URL, {
   password: env.REDIS_PASSWORD || undefined,
-  maxRetriesPerRequest: env.NODE_ENV === 'development' ? 1 : 3,
+  maxRetriesPerRequest: null,
   retryStrategy(times: number) {
-    if (env.NODE_ENV === 'development' && times > 2) {
-      return null; // Stop reconnecting in dev when Redis isn't running
+    if (times > 1) {
+      return null; // Stop reconnecting when Redis isn't running
     }
-    const delay = Math.min(times * 50, 2000);
-    return delay;
+    return 100;
   },
   lazyConnect: true,
   enableReadyCheck: false,
-  connectTimeout: 3000,
-  commandTimeout: 3000,
+  connectTimeout: 1000,
+  commandTimeout: 1000,
 });
 
 redis.on('connect', () => {
