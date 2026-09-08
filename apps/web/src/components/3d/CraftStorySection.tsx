@@ -54,6 +54,7 @@ const CRAFT_STEPS = [
 const CraftScene = ({ stepIndex }: { stepIndex: number }) => {
   const groupRef = useRef<THREE.Group>(null);
   const targetRotation = useRef(0);
+
   useFrame((state, delta) => {
     if (!groupRef.current) return;
 
