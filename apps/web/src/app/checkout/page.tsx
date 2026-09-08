@@ -110,7 +110,7 @@ export default function CheckoutPage() {
         setIsProcessing(false);
         toast.success('Order placed successfully via Cash on Delivery!');
         router.push(`/order-success/${orderId}`);
-      } catch (err) {
+      } catch {
         setIsProcessing(false);
         toast.error('Failed to place Cash on Delivery order.');
       }
@@ -145,7 +145,6 @@ export default function CheckoutPage() {
         };
       });
       const activeKey = paymentOrder.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_TZfUxWXYyuCC5e';
-      console.log('Initiating Razorpay payment:', { orderId: paymentOrder.orderId, key: activeKey, amount: paymentOrder.amount });
 
       // If mock fallback without real Razorpay order/key
       if (!paymentOrder.orderId || paymentOrder.orderId.startsWith('mock_') || paymentOrder.isMock) {
@@ -225,7 +224,7 @@ export default function CheckoutPage() {
             clearCart();
             setIsProcessing(false);
             router.push(`/order-success/${orderId}`);
-          } catch (verifyErr) {
+          } catch {
             toast.error('Payment verification failed. Please contact client concierge.', { id: 'rzp-verify' });
             setIsProcessing(false);
           }

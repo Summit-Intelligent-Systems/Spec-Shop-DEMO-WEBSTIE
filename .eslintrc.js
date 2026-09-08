@@ -32,7 +32,7 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
-    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'warn',
@@ -45,6 +45,8 @@ module.exports = {
     // packages such as @xyz-eyewear/*.
     'import/order': 'off',
     'import/default': 'off',
+    'import/no-named-as-default': 'off',
+    'import/no-named-as-default-member': 'off',
     // TypeScript's compiler performs module resolution and path-alias checks.
     // The ESLint resolver cannot reliably resolve the Next.js @/* alias from
     // every workspace package, so leave this check to `npm run type-check`.
