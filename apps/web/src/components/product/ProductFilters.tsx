@@ -359,7 +359,7 @@ export const ProductFilters = ({
           onClick={() => setIsOpenMobile(true)}
           className="w-full py-3 px-4 rounded-xl border border-obsidian-300 bg-white flex items-center justify-between text-xs font-semibold text-obsidian-900 shadow-sm active:bg-obsidian-50"
         >
-          <div className="flex items-center gap-2">
+          <span className="flex items-center gap-2">
             <SlidersHorizontal className="w-4 h-4 text-gold" />
             <span>Filter & Refine</span>
             {activeFilterCount > 0 && (
@@ -367,7 +367,7 @@ export const ProductFilters = ({
                 {activeFilterCount}
               </span>
             )}
-          </div>
+          </span>
           <span className="text-obsidian-500 font-normal">({totalResults} styles)</span>
         </button>
       </div>

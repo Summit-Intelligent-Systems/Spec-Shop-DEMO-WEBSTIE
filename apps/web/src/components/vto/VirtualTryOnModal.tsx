@@ -5,9 +5,7 @@ import Image from 'next/image';
 import {
   X,
   Camera,
-  RotateCcw,
   Sparkles,
-  SplitSquareVertical,
   ShoppingBag,
   Upload,
   User,
@@ -37,18 +35,12 @@ export const VirtualTryOnModal = ({
   onClose,
 }: VirtualTryOnModalProps) => {
   const [selectedProduct, setSelectedProduct] = useState<ProductItem>(product);
-  const [comparisonProduct, setComparisonProduct] = useState<ProductItem | null>(null);
-  const [isCompareMode, setIsCompareMode] = useState(false);
 
   // Mode: 'camera' | 'upload' | 'model'
   const [streamMode, setStreamMode] = useState<'camera' | 'upload' | 'model'>('model');
   const [selectedModel, setSelectedModel] = useState(MODEL_FACES[0]);
   const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
 
-  // Adjustments
-  const [frameScale, setFrameScale] = useState(100); // 80 to 130%
-  const [verticalOffset, setVerticalOffset] = useState(0); // -40 to 40 px
-  const [horizontalOffset, setHorizontalOffset] = useState(0); // -30 to 30 px
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isStartingCamera, setIsStartingCamera] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -215,27 +207,6 @@ export const VirtualTryOnModal = ({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Compare Toggle */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsCompareMode(!isCompareMode);
-                if (!comparisonProduct) {
-                  setComparisonProduct(
-                    MOCK_PRODUCTS.find((p) => p.id !== selectedProduct.id) || MOCK_PRODUCTS[1],
-                  );
-                }
-              }}
-              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-                isCompareMode
-                  ? 'border-obsidian-950 bg-obsidian-950 text-white'
-                  : 'border-obsidian-300 text-obsidian-700 hover:border-obsidian-400'
-              }`}
-            >
-              <SplitSquareVertical className="w-4 h-4" />
-              <span>Side-by-Side Compare</span>
-            </button>
-
             <button
               type="button"
               onClick={() => {
@@ -384,82 +355,8 @@ export const VirtualTryOnModal = ({
                 />
               )}
 
-              {/* Single Frame Overlay OR Dual Frame Split View */}
-              {!(
-                (streamMode === 'upload' && !uploadedPhoto) ||
-                (streamMode === 'camera' && !isCameraActive)
-              ) && (
-                !isCompareMode ? (
-                  <div
-                    className="absolute pointer-events-none transition-all duration-75 drop-shadow-2xl"
-                    style={{
-                      width: `${54 * (frameScale / 100)}%`,
-                      top: `calc(38% + ${verticalOffset}px)`,
-                      left: `calc(50% + ${horizontalOffset}px)`,
-                      transform: 'translate(-50%, -50%)',
-                    }}
-                  >
-                    <Image
-                      src={selectedProduct.colors[0].image}
-                      alt={selectedProduct.name}
-                      width={400}
-                      height={200}
-                      className="w-full object-contain filter drop-shadow-xl"
-                    />
-                  </div>
-                ) : (
-                  /* Split Comparison Overlay */
-                  <div className="absolute inset-0 grid grid-cols-2 divide-x-2 divide-white/60 pointer-events-none">
-                    {/* Left Side: Frame A */}
-                    <div className="relative h-full">
-                      <div
-                        className="absolute transition-all drop-shadow-2xl"
-                        style={{
-                          width: `${75 * (frameScale / 100)}%`,
-                          top: `calc(38% + ${verticalOffset}px)`,
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                      >
-                        <Image
-                          src={selectedProduct.colors[0].image}
-                          alt={selectedProduct.name}
-                          width={300}
-                          height={150}
-                          className="w-full object-contain"
-                        />
-                      </div>
-                      <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-white font-semibold">
-                        A: {selectedProduct.name}
-                      </div>
-                    </div>
 
-                    {/* Right Side: Frame B */}
-                    <div className="relative h-full">
-                      <div
-                        className="absolute transition-all drop-shadow-2xl"
-                        style={{
-                          width: `${75 * (frameScale / 100)}%`,
-                          top: `calc(38% + ${verticalOffset}px)`,
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                      >
-                        <Image
-                          src={comparisonProduct?.colors[0].image || selectedProduct.colors[0].image}
-                          alt={comparisonProduct?.name || ''}
-                          width={300}
-                          height={150}
-                          className="w-full object-contain"
-                        />
-                      </div>
-                      <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] text-white font-semibold">
-                        B: {comparisonProduct?.name}
-                      </div>
-                    </div>
-                  </div>
-                )
-              )}
+
 
               {/* Status Overlay Badge */}
               <div className="absolute top-3 left-3 flex items-center gap-2">
@@ -561,48 +458,6 @@ export const VirtualTryOnModal = ({
                   <span>Change Photo</span>
                 </button>
               )}
-
-              {/* Frame Scale & Position Controls */}
-              <div className="flex items-center gap-4 text-xs">
-                {/* Scale Slider */}
-                <div className="flex items-center gap-2">
-                  <span className="text-obsidian-500 font-medium">Scale:</span>
-                  <input
-                    type="range"
-                    min={80}
-                    max={125}
-                    value={frameScale}
-                    onChange={(e) => setFrameScale(Number(e.target.value))}
-                    className="w-20 h-1.5 bg-obsidian-300 rounded-lg appearance-none cursor-pointer accent-obsidian-950"
-                  />
-                  <span className="font-mono text-obsidian-700 w-7">{frameScale}%</span>
-                </div>
-
-                {/* Vertical Position */}
-                <div className="flex items-center gap-2">
-                  <span className="text-obsidian-500 font-medium">Bridge:</span>
-                  <input
-                    type="range"
-                    min={-30}
-                    max={30}
-                    value={verticalOffset}
-                    onChange={(e) => setVerticalOffset(Number(e.target.value))}
-                    className="w-20 h-1.5 bg-obsidian-300 rounded-lg appearance-none cursor-pointer accent-obsidian-950"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFrameScale(100);
-                      setVerticalOffset(0);
-                      setHorizontalOffset(0);
-                    }}
-                    className="p-1 text-obsidian-400 hover:text-obsidian-950 transition-colors"
-                    title="Reset position"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
             </div>
 
             {/* Camera Error / Permission Instructions */}
@@ -686,7 +541,7 @@ export const VirtualTryOnModal = ({
                 </div>
                 <p className="text-xs text-obsidian-500 leading-relaxed">
                   {uploadedPhoto
-                    ? 'Adjust the scale and bridge sliders to fine-tune the glasses alignment on your face.'
+                    ? 'Preview all frames with accurate scale and styling.'
                     : 'Select a front-facing selfie to preview all frames with accurate scale and styling.'}
                 </p>
                 <button
@@ -709,7 +564,7 @@ export const VirtualTryOnModal = ({
                   </span>
                 </div>
                 <p className="text-xs text-obsidian-500 leading-relaxed">
-                  Look straight into your camera. Use the <strong>Scale</strong> and <strong>Bridge</strong> sliders to match your pupillary distance (PD) and nose height.
+                  Look straight into your camera to preview your live mirror stream.
                 </p>
               </div>
             )}

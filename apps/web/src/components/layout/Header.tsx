@@ -15,8 +15,6 @@ export const Header = () => {
   const { openMobileNav, openSearch, openAuthModal } = useUIStore();
   const { openCart, getItemCount } = useCartStore();
 
-  const cartCount = mounted ? getItemCount() : 0;
-
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
@@ -25,6 +23,8 @@ export const Header = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const cartCount = mounted ? getItemCount() : 0;
 
   return (
     <header

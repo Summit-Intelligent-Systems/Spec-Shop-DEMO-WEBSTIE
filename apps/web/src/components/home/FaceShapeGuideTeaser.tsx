@@ -1,15 +1,9 @@
 'use client';
 
-import { useState, lazy, Suspense } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Sparkles, Glasses } from 'lucide-react';
 import { FACE_SHAPES } from '@/lib/mockData';
-
-// Lazy-load 3D components
-const LazyCanvas = lazy(() => import('@/components/3d/LazyCanvas'));
-const FaceShapeMorphScene = lazy(() => import('@/components/3d/FaceShapeMorphScene'));
-
-type FaceShapeName = 'Oval' | 'Round' | 'Square' | 'Heart' | 'Diamond';
 
 export const FaceShapeGuideTeaser = () => {
   const [selectedShape, setSelectedShape] = useState(FACE_SHAPES[0]);
@@ -103,58 +97,70 @@ export const FaceShapeGuideTeaser = () => {
             </div>
           </div>
 
-          {/* Right Column: 3D Face Shape Morph Viewer */}
+          {/* Right Column: Face Shape Visual */}
           <div className="lg:col-span-6">
-            <div className="relative rounded-3xl overflow-hidden bg-obsidian-950 aspect-square shadow-2xl">
-              {/* 3D Canvas — morphing head model */}
-              <Suspense
-                fallback={
-                  <div className="w-full h-full flex flex-col justify-between p-8 sm:p-12">
-                    <div className="space-y-2 relative z-10">
-                      <span className="text-[10px] uppercase font-bold tracking-widest text-gold">
-                        Loading 3D Viewer...
-                      </span>
-                    </div>
-                  </div>
-                }
-              >
-                <div className="absolute inset-0">
-                  <LazyCanvas
-                    bgColor="#050505"
-                    fov={35}
-                    cameraPosition={[1.2, 0.3, 3.5]}
-                    fallbackSrc="/images/hero-banner.jpg"
-                    fallbackAlt="Face shape guide"
-                  >
-                    <FaceShapeMorphScene
-                      selectedShape={selectedShape.shape as FaceShapeName}
-                    />
-                  </LazyCanvas>
-                </div>
-              </Suspense>
-
-              {/* Text overlay on the 3D canvas */}
-              <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-10 pointer-events-none">
+            <div className="relative rounded-3xl overflow-hidden bg-obsidian-950 aspect-square shadow-2xl flex flex-col justify-between p-8 sm:p-12">
+              {/* Top Label */}
+              <div className="relative z-10">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-gold">
-                  Live 3D Morph Preview
+                  Face Shape Preview
                 </span>
                 <h3 className="font-serif text-xl sm:text-2xl text-white font-light mt-1">
                   {selectedShape.shape} Face Shape
                 </h3>
               </div>
 
-              {/* Bottom overlay — CTA */}
-              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-10">
+              {/* Centre SVG Face Contour */}
+              <div className="flex-1 flex items-center justify-center relative z-10">
+                <svg viewBox="0 0 200 240" className="w-48 h-48 sm:w-64 sm:h-64 stroke-gold fill-none transition-all duration-500" strokeWidth="1.5">
+                  {selectedShape.shape === 'Oval' && (
+                    <>
+                      <ellipse cx="100" cy="120" rx="60" ry="85" className="stroke-gold/80" />
+                      <ellipse cx="100" cy="100" rx="35" ry="18" className="stroke-gold/40" />
+                    </>
+                  )}
+                  {selectedShape.shape === 'Round' && (
+                    <>
+                      <circle cx="100" cy="115" r="72" className="stroke-gold/80" />
+                      <ellipse cx="100" cy="100" rx="35" ry="18" className="stroke-gold/40" />
+                    </>
+                  )}
+                  {selectedShape.shape === 'Square' && (
+                    <>
+                      <rect x="30" y="35" width="140" height="170" rx="20" className="stroke-gold/80" />
+                      <ellipse cx="100" cy="100" rx="35" ry="18" className="stroke-gold/40" />
+                    </>
+                  )}
+                  {selectedShape.shape === 'Heart' && (
+                    <>
+                      <path d="M100 210 C30 140, 25 60, 100 40 C175 60, 170 140, 100 210Z" className="stroke-gold/80" />
+                      <ellipse cx="100" cy="100" rx="35" ry="18" className="stroke-gold/40" />
+                    </>
+                  )}
+                  {selectedShape.shape === 'Diamond' && (
+                    <>
+                      <polygon points="100,30 170,120 100,210 30,120" className="stroke-gold/80" />
+                      <ellipse cx="100" cy="100" rx="35" ry="18" className="stroke-gold/40" />
+                    </>
+                  )}
+                  {/* Centre guidelines */}
+                  <line x1="100" y1="20" x2="100" y2="220" strokeDasharray="3,3" className="stroke-white/10" />
+                  <line x1="20" y1="120" x2="180" y2="120" strokeDasharray="3,3" className="stroke-white/10" />
+                </svg>
+              </div>
+
+              {/* Bottom CTA */}
+              <div className="relative z-10">
                 <Link
                   href="/try-on"
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gold hover:bg-gold-400 text-obsidian-950 text-xs font-semibold uppercase tracking-wider transition-all shadow-gold"
                 >
-                  <span>Launch 3D Virtual Try-On</span>
+                  <span>Launch Virtual Try-On</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
-              {/* Decorative Geometric Face Contours SVG — subtle behind 3D */}
+              {/* Background decorative contours */}
               <div className="absolute -bottom-10 -right-10 w-96 h-96 opacity-10 pointer-events-none z-0">
                 <svg viewBox="0 0 200 200" className="w-full h-full stroke-gold fill-none" strokeWidth="0.75">
                   <ellipse cx="100" cy="100" rx="60" ry="85" />
