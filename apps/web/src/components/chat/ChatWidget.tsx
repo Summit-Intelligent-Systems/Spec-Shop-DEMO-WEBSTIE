@@ -229,9 +229,13 @@ export const ChatWidget: React.FC = () => {
       const decoder = new TextDecoder();
       let fullText = '';
 
-      while (true) {
+      let isDone = false;
+      while (!isDone) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) {
+          isDone = true;
+          break;
+        }
 
         const chunk = decoder.decode(value, { stream: true });
         fullText += chunk;

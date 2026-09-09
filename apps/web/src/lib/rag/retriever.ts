@@ -9,7 +9,8 @@
  * 5. Source Citation Extraction
  */
 
-import { KNOWLEDGE_CHUNKS, KnowledgeChunk } from './knowledgeBase';
+import { KNOWLEDGE_CHUNKS } from './knowledgeBase';
+import type { KnowledgeChunk } from './knowledgeBase';
 import { generateEmbedding, cosineSimilarity, getChunkEmbeddings } from './embeddings';
 
 export interface RetrievedResult {
@@ -30,7 +31,7 @@ export interface SourceCitation {
  * Simple English stemmer for common suffixes
  */
 function stemWord(word: string): string {
-  let w = word.toLowerCase();
+  const w = word.toLowerCase();
   if (w.endsWith('ies') && w.length > 4) return w.slice(0, -3) + 'y';
   if (w.endsWith('es') && w.length > 3) return w.slice(0, -2);
   if (w.endsWith('s') && !w.endsWith('ss') && w.length > 3) return w.slice(0, -1);

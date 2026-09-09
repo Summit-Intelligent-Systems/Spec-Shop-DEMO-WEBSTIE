@@ -11,7 +11,8 @@
  * 3. ReadableStream Token Streaming
  */
 
-import { RetrievedResult, formatContext, extractSources, SourceCitation } from './retriever';
+import type { RetrievedResult, SourceCitation } from './retriever';
+import { formatContext, extractSources } from './retriever';
 
 export interface GenerationResult {
   stream: ReadableStream<Uint8Array>;
@@ -235,11 +236,15 @@ async function generateWithOpenAI(
 
     return new ReadableStream({
       async start(controller) {
+        let isDone = false;
         let buffer = '';
         try {
-          while (true) {
+          while (!isDone) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) {
+              isDone = true;
+              break;
+            }
 
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split('\n');

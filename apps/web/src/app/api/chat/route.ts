@@ -3,7 +3,8 @@
  * POST /api/chat
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { retrieveRelevantChunks } from '@/lib/rag/retriever';
 import { generateGroundedAnswer } from '@/lib/rag/generator';
 
