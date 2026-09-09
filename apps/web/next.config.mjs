@@ -54,6 +54,26 @@ const nextConfig = {
       destination: '/shop/sunglasses',
       permanent: true,
     },
+    {
+      source: '/cms',
+      destination: '/admin',
+      permanent: false,
+    },
+    {
+      source: '/csm',
+      destination: '/admin',
+      permanent: false,
+    },
+    {
+      source: '/admin-panel',
+      destination: '/admin',
+      permanent: false,
+    },
+    {
+      source: '/dashboard',
+      destination: '/admin',
+      permanent: false,
+    },
   ],
 
   // ─── Compiler Options ────────────────────────────────────────────────────────

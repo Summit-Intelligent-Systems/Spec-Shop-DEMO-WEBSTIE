@@ -178,6 +178,7 @@ export const Footer = () => {
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-obsidian-500">
           <p>© {new Date().getFullYear()} XYZ Eyewear Ltd. All Rights Reserved. Crafted with Japanese Titanium & Mazzucchelli Acetate.</p>
           <div className="flex items-center gap-6">
+            <Link href="/admin" className="text-gold hover:text-gold-400 font-medium transition-colors">Admin Portal / CMS</Link>
             <Link href="/privacy-policy" className="hover:text-obsidian-300 transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-obsidian-300 transition-colors">Terms of Service</Link>
             <Link href="/sitemap" className="hover:text-obsidian-300 transition-colors">Sitemap</Link>
