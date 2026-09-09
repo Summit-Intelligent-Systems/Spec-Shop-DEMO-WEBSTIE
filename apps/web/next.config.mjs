@@ -11,6 +11,7 @@ const nextConfig = {
   // ─── Image Domains ───────────────────────────────────────────────────────────
   images: {
     remotePatterns: [
+      { protocol: 'https', hostname: '**' },
       { protocol: 'http', hostname: 'localhost', port: '4000' },
       { protocol: 'https', hostname: '**.s3.amazonaws.com' },
       { protocol: 'https', hostname: '**.s3.ap-south-1.amazonaws.com' },
