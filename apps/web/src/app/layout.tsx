@@ -10,6 +10,7 @@ import { CartDrawer } from '@/components/layout/CartDrawer';
 import { SearchModal } from '@/components/layout/SearchModal';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { ChatWidget } from '@/components/chat/ChatWidget';
 import '@/styles/globals.css';
 
 // ─── Font Configuration ───────────────────────────────────────────────────────
@@ -169,6 +170,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <ChatWidget />
         </Providers>
         <Script
           id="razorpay-checkout-sdk"

@@ -4,7 +4,6 @@ import { HeroSlider } from '@/components/home/HeroSlider';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
 import { BestsellerCarousel } from '@/components/home/BestsellerCarousel';
 import { FaceShapeGuideTeaser } from '@/components/home/FaceShapeGuideTeaser';
-import { CraftStorySection } from '@/components/3d/CraftStorySection';
 import { EyeCareBanner } from '@/components/home/EyeCareBanner';
 import { LookbookSection } from '@/components/home/LookbookSection';
 
@@ -30,9 +29,6 @@ export default function HomePage() {
 
       {/* Face Shape Geometry Guide */}
       <FaceShapeGuideTeaser />
-
-      {/* Material & Engineering Craft Story */}
-      <CraftStorySection />
 
       {/* Clinical Eye-Care & Free Test Banner */}
       <EyeCareBanner />
