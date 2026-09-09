@@ -1079,3 +1079,111 @@ model SearchLog {
   @@index([searchedAt])
   @@map("search_logs")
 }
+
+// ─── Audit Log ────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  userName   String   // Snapshot of user name at time of action
+  action     String   // CREATE | UPDATE | DELETE | STATUS_CHANGE | LOGIN | etc.
+  entity     String   // Product | Order | Category | CmsPage | etc.
+  entityId   String?
+  entityName String?  // Human-readable name of the entity (e.g. product name)
+  details    Json?    // What changed (before/after or extra context)
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ─── Content Pages (Rich Text) ────────────────────────────────────────────────
+
+model ContentPage {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  content         String   // Rich text HTML content
+  excerpt         String?
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  isPublished     Boolean  @default(false)
+  publishedAt     DateTime?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isPublished])
+  @@map("content_pages")
+}
+
+// ─── Site Settings (Global Key-Value) ─────────────────────────────────────────
+
+model SiteSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  type      String   @default("string") // string | number | boolean | json | image
+  label     String?
+  group     String   @default("general") // general | branding | contact | email | tax | shipping | payment
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([group])
+  @@map("site_settings")
+}
+
+// ─── Promotions ───────────────────────────────────────────────────────────────
+
+enum PromotionType {
+  FLASH_SALE
+  SEASONAL
+  CLEARANCE
+  BUNDLE
+  BOGO
+}
+
+enum PromotionStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+model Promotion {
+  id              String          @id @default(cuid())
+  name            String
+  slug            String          @unique
+  description     String?
+  type            PromotionType
+  status          PromotionStatus @default(DRAFT)
+  discountType    CouponType      @default(PERCENTAGE)
+  discountValue   Decimal         @db.Decimal(10, 2)
+  bannerImageUrl  String?
+  startsAt        DateTime
+  endsAt          DateTime
+  isActive        Boolean         @default(true)
+  applicableProducts   String[]
+  applicableCategories String[]
+  applicableBrands     String[]
+  minOrderAmount  Decimal?        @db.Decimal(10, 2)
+  maxDiscountAmount Decimal?      @db.Decimal(10, 2)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([startsAt])
+  @@index([endsAt])
+  @@map("promotions")
+}

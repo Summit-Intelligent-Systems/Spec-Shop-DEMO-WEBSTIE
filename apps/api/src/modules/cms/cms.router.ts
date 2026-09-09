@@ -1,9 +1,10 @@
-import { Router, type Request, type Response } from 'express';
+import { Router, type Request, type Response, type NextFunction } from 'express';
+import { prisma } from '../../config/database';
 import { sendSuccess } from '../../shared/utils';
 
 export const cmsRouter = Router();
 
-const CMS_CONTENT = {
+const DEFAULT_CMS = {
   announcement: {
     text: 'Complimentary Pan-India Express Delivery & Home Optical Styling on all orders above ₹1,999',
     linkText: 'Explore Lookbook',
@@ -55,14 +56,48 @@ const CMS_CONTENT = {
   ],
 };
 
-cmsRouter.get('/announcement', (_req: Request, res: Response): void => {
-  sendSuccess(res, CMS_CONTENT.announcement);
+cmsRouter.get('/announcement', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const record = await prisma.cmsGlobal.findUnique({ where: { key: 'announcement' } });
+    if (record && record.value) {
+      sendSuccess(res, record.value);
+      return;
+    }
+    sendSuccess(res, DEFAULT_CMS.announcement);
+  } catch (err) {
+    next(err);
+  }
 });
 
-cmsRouter.get('/hero-slides', (_req: Request, res: Response): void => {
-  sendSuccess(res, CMS_CONTENT.heroSlides);
+cmsRouter.get('/hero-slides', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const heroSection = await prisma.cmsSection.findFirst({
+      where: { type: 'hero', isActive: true },
+    });
+    if (heroSection && heroSection.content) {
+      const slides = (heroSection.content as any).slides || heroSection.content;
+      sendSuccess(res, slides);
+      return;
+    }
+    sendSuccess(res, DEFAULT_CMS.heroSlides);
+  } catch (err) {
+    next(err);
+  }
 });
 
-cmsRouter.get('/lookbook', (_req: Request, res: Response): void => {
-  sendSuccess(res, CMS_CONTENT.lookbook);
+cmsRouter.get('/lookbook', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const lookbookSection = await prisma.cmsSection.findFirst({
+      where: { type: 'lookbook', isActive: true },
+    });
+    if (lookbookSection && lookbookSection.content) {
+      const items = (lookbookSection.content as any).items || lookbookSection.content;
+      sendSuccess(res, items);
+      return;
+    }
+    sendSuccess(res, DEFAULT_CMS.lookbook);
+  } catch (err) {
+    next(err);
+  }
 });
+

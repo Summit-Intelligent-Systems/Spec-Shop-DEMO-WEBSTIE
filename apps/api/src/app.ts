@@ -32,6 +32,7 @@ import { analyticsRouter } from './modules/analytics/analytics.router';
 import { inventoryRouter } from './modules/inventory/inventory.router';
 import { membershipRouter } from './modules/membership/membership.router';
 import { paymentsRouter } from './modules/payments/payments.router';
+import { adminRouter } from './modules/admin/admin.router';
 
 export const app: Express = express();
 
@@ -135,6 +136,9 @@ app.use(`${API_PREFIX}/media`, mediaRouter);
 app.use(`${API_PREFIX}/analytics`, analyticsRouter);
 app.use(`${API_PREFIX}/inventory`, inventoryRouter);
 app.use(`${API_PREFIX}/payments`, paymentsRouter);
+
+// Phase: Admin CMS Panel
+app.use(`${API_PREFIX}/admin`, adminRouter);
 
 // ─── API Welcome ─────────────────────────────────────────────────────────────
 app.get('/', (_req: Request, res: Response) => {
