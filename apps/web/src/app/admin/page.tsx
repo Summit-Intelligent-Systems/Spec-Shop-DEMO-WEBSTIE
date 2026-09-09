@@ -393,7 +393,7 @@ export default function AdminDashboardPage() {
                         {actionLabels[item.action] || item.action.toLowerCase()}{' '}
                         <span className="text-gold">{item.entity}</span>
                         {item.entityName && (
-                          <span className="text-obsidian-400"> "{item.entityName}"</span>
+                          <span className="text-obsidian-400"> &ldquo;{item.entityName}&rdquo;</span>
                         )}
                       </p>
                       <p className="text-[10px] text-obsidian-600 mt-0.5">{formatRelative(item.createdAt)}</p>

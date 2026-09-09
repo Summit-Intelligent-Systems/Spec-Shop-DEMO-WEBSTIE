@@ -85,7 +85,7 @@ export default function HomepageBuilderPage() {
       let parsedContent;
       try {
         parsedContent = JSON.parse(sectionContentJson);
-      } catch (e) {
+      } catch {
         alert('Invalid JSON formatting in section content.');
         setSaving(false);
         return;
