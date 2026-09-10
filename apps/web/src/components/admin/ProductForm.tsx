@@ -10,6 +10,7 @@ import {
   GripVertical,
 } from 'lucide-react';
 import { FormField, AdminInput, AdminSelect, AdminTextarea } from '@/components/admin/FormField';
+import { ImageUploadField } from '@/components/admin/ImageUploadField';
 import { apiGet, apiPost, apiPut } from '@/lib/api';
 import toast from 'react-hot-toast';
 
@@ -42,6 +43,8 @@ interface ProductFormData {
   warrantyInfo: string;
   careInstructions: string;
   prescriptionCompatible: boolean;
+  primaryImage: string;
+  images: string[];
 }
 
 interface VariantFormData {
@@ -56,6 +59,7 @@ interface VariantFormData {
   stock: string;
   isDefault: boolean;
   isActive: boolean;
+  imageUrl?: string;
 }
 
 interface SelectOption { id: string; name: string; slug?: string }
@@ -75,12 +79,15 @@ const defaultProduct: ProductFormData = {
   isFeatured: false, isNewArrival: false, isBestSeller: false,
   tags: '', metaTitle: '', metaDesc: '', warrantyInfo: '', careInstructions: '',
   prescriptionCompatible: true,
+  primaryImage: '',
+  images: [],
 };
 
 const defaultVariant: VariantFormData = {
   sku: '', color: '', colorHex: '#000000', size: '',
   frameMaterial: '', price: '', comparePrice: '', stock: '0',
   isDefault: false, isActive: true,
+  imageUrl: '',
 };
 
 const genderOptions = ['UNISEX', 'MEN', 'WOMEN', 'KIDS'];
@@ -100,7 +107,7 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
   const [categories, setCategories] = useState<SelectOption[]>([]);
   const [brands, setBrands] = useState<SelectOption[]>([]);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'basic' | 'variants' | 'details' | 'seo'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'variants' | 'images' | 'details' | 'seo'>('basic');
 
   // Fetch categories and brands
   useEffect(() => {
@@ -143,6 +150,10 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
         warrantyInfo: initialData.warrantyInfo || '',
         careInstructions: initialData.careInstructions || '',
         prescriptionCompatible: initialData.prescriptionCompatible ?? true,
+        primaryImage: initialData.primaryImage || initialData.images?.[0]?.url || initialData.images?.[0] || '',
+        images: Array.isArray(initialData.images)
+          ? initialData.images.map((img: any) => typeof img === 'string' ? img : img.url).filter(Boolean)
+          : [],
       });
 
       if (initialData.variants?.length) {
@@ -157,13 +168,14 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
           comparePrice: v.comparePrice?.toString() || '',
           stock: v.stock?.toString() || '0',
           isDefault: v.isDefault || false,
-          isActive: v.isActive ?? true,
+          isActive: v.isActive !== false,
+          imageUrl: v.imageUrl || v.images?.[0]?.url || '',
         })));
       }
     }
   }, [initialData]);
 
-  const updateForm = (key: keyof ProductFormData, value: string | boolean) => {
+  const updateForm = (key: keyof ProductFormData, value: any) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -199,11 +211,14 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
         bridgeWidth: form.bridgeWidth ? parseInt(form.bridgeWidth) : undefined,
         templeLength: form.templeLength ? parseInt(form.templeLength) : undefined,
         tags: form.tags ? form.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
+        primaryImage: form.primaryImage || form.images[0] || undefined,
+        images: form.images,
         variants: variants.map((v) => ({
           ...v,
           price: parseFloat(v.price) || 0,
           comparePrice: v.comparePrice ? parseFloat(v.comparePrice) : undefined,
           stock: parseInt(v.stock) || 0,
+          imageUrl: v.imageUrl || undefined,
         })),
       };
 
@@ -226,6 +241,7 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
   const tabs = [
     { key: 'basic' as const, label: 'Basic Info' },
     { key: 'variants' as const, label: `Variants (${variants.length})` },
+    { key: 'images' as const, label: `Images (${(form.primaryImage ? 1 : 0) + form.images.length})` },
     { key: 'details' as const, label: 'Details & Specs' },
     { key: 'seo' as const, label: 'SEO' },
   ];
@@ -431,8 +447,112 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
                     </label>
                   </div>
                 </div>
+
+                <div className="pt-2 border-t border-obsidian-800/40">
+                  <ImageUploadField
+                    label="Variant Photo (Optional)"
+                    value={variant.imageUrl || ''}
+                    onChange={(url) => updateVariant(index, 'imageUrl', url)}
+                    folder="variants"
+                    placeholder="Upload specific color photo or paste URL"
+                  />
+                </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Images & Media */}
+        {activeTab === 'images' && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Primary Product Image</h3>
+              <p className="text-xs text-obsidian-400 mt-0.5 mb-3">
+                Featured as the main thumbnail in catalog grids, product cards, and search results.
+              </p>
+              <ImageUploadField
+                value={form.primaryImage}
+                onChange={(url) => updateForm('primaryImage', url)}
+                folder="products"
+                placeholder="Upload primary photo from device or enter image URL"
+              />
+            </div>
+
+            <div className="pt-5 border-t border-obsidian-800/60">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h3 className="text-sm font-semibold text-white">Additional Gallery Images</h3>
+                  <p className="text-xs text-obsidian-400 mt-0.5">
+                    Extra high-resolution angles, lifestyle shots, and macro details shown on the product page.
+                  </p>
+                </div>
+              </div>
+
+              {/* Gallery Grid */}
+              {form.images.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+                  {form.images.map((imgUrl, imgIndex) => (
+                    <div
+                      key={imgIndex}
+                      className="relative group rounded-xl overflow-hidden border border-obsidian-700 bg-obsidian-900 aspect-square"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={imgUrl}
+                        alt={`Gallery ${imgIndex + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-obsidian-950/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentPrimary = form.primaryImage;
+                            updateForm('primaryImage', imgUrl);
+                            updateForm(
+                              'images',
+                              form.images
+                                .filter((_, i) => i !== imgIndex)
+                                .concat(currentPrimary ? [currentPrimary] : []),
+                            );
+                          }}
+                          className="px-2.5 py-1 bg-gold text-obsidian-950 text-[10px] font-bold rounded-lg hover:bg-gold-light transition-colors"
+                        >
+                          Set as Primary
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateForm(
+                              'images',
+                              form.images.filter((_, i) => i !== imgIndex),
+                            );
+                          }}
+                          className="p-1.5 text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-lg transition-colors"
+                          title="Delete image"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Add New Gallery Image Upload Field */}
+              <div className="bg-obsidian-900/40 border border-obsidian-800 rounded-xl p-4">
+                <p className="text-xs font-medium text-obsidian-300 mb-2">Upload Gallery Image</p>
+                <ImageUploadField
+                  value=""
+                  onChange={(newUrl) => {
+                    if (newUrl) {
+                      updateForm('images', [...form.images, newUrl]);
+                    }
+                  }}
+                  folder="products/gallery"
+                  placeholder="Upload gallery image or paste remote URL"
+                />
+              </div>
+            </div>
           </div>
         )}
 

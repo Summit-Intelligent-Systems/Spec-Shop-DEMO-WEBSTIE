@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
+import { ImageUploadField } from '@/components/admin/ImageUploadField';
 
 interface MediaFile {
   id: string;
@@ -234,27 +235,32 @@ export default function MediaLibraryPage() {
       {/* Add Media Modal */}
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-obsidian-950/80 backdrop-blur-sm">
-          <div className="bg-obsidian-900 border border-obsidian-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h2 className="text-lg font-bold text-white">Add Image Asset</h2>
+          <div className="bg-obsidian-900 border border-obsidian-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <h2 className="text-lg font-bold text-white">Upload / Add Image Asset</h2>
             <form onSubmit={handleCreateFile} className="space-y-4">
               <div>
-                <label className="text-xs text-obsidian-300 block mb-1">Asset URL or Local Path</label>
-                <input
-                  type="text"
-                  required
+                <label className="text-xs text-obsidian-300 block mb-1">Select or Upload Image</label>
+                <ImageUploadField
                   value={newFileUrl}
-                  onChange={(e) => setNewFileUrl(e.target.value)}
-                  placeholder="/images/hero-banner.jpg or https://..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-obsidian-800 border border-obsidian-700 text-white text-sm focus:border-gold focus:outline-none"
+                  onChange={(url) => {
+                    setNewFileUrl(url);
+                    if (!newFileName && url) {
+                      const extracted = url.split('/').pop()?.split('?')[0];
+                      if (extracted) setNewFileName(extracted);
+                    }
+                  }}
+                  folder="media-library"
+                  placeholder="Upload file to Supabase or enter remote URL"
                 />
               </div>
+
               <div>
-                <label className="text-xs text-obsidian-300 block mb-1">Asset Name / Key (Optional)</label>
+                <label className="text-xs text-obsidian-300 block mb-1">Asset Key / Label (Optional)</label>
                 <input
                   type="text"
                   value={newFileName}
                   onChange={(e) => setNewFileName(e.target.value)}
-                  placeholder="e.g. hero-spring-collection.jpg"
+                  placeholder="e.g. hero-collection-spring.jpg"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-obsidian-800 border border-obsidian-700 text-white text-sm focus:border-gold focus:outline-none"
                 />
               </div>
@@ -269,9 +275,10 @@ export default function MediaLibraryPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gold text-obsidian-950 text-sm font-medium hover:bg-gold-light"
+                  disabled={!newFileUrl}
+                  className="px-5 py-2 rounded-xl bg-gold text-obsidian-950 text-sm font-medium hover:bg-gold-light disabled:opacity-50"
                 >
-                  Register Asset
+                  Save to Media Library
                 </button>
               </div>
             </form>

@@ -6,6 +6,7 @@ import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/api';
 import DataTable, { type Column } from '@/components/admin/DataTable';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import FormField from '@/components/admin/FormField';
+import { ImageUploadField } from '@/components/admin/ImageUploadField';
 
 interface Brand {
   id: string;
@@ -313,15 +314,16 @@ export default function BrandsPage() {
                 </FormField>
               </div>
 
-              <FormField label="Logo URL">
-                <input
-                  type="text"
+              <div>
+                <ImageUploadField
+                  label="Brand Logo"
                   value={logoUrl}
-                  onChange={(e) => setLogoUrl(e.target.value)}
-                  placeholder="/images/brands/logo.png or remote URL"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-obsidian-800/80 border border-obsidian-700 text-white text-sm focus:border-gold focus:outline-none"
+                  onChange={setLogoUrl}
+                  folder="brands"
+                  placeholder="Upload brand logo or enter URL"
+                  helperText="Supports SVG, PNG, WebP transparent logos"
                 />
-              </FormField>
+              </div>
 
               <FormField label="Description">
                 <textarea

@@ -6,6 +6,7 @@ import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/api';
 import DataTable, { type Column } from '@/components/admin/DataTable';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import FormField from '@/components/admin/FormField';
+import { ImageUploadField } from '@/components/admin/ImageUploadField';
 
 interface Category {
   id: string;
@@ -258,15 +259,16 @@ export default function CategoriesPage() {
                 </select>
               </FormField>
 
-              <FormField label="Image URL">
-                <input
-                  type="text"
+              <div>
+                <ImageUploadField
+                  label="Category Image"
                   value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="/images/category-sunglasses.jpg or remote URL"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-obsidian-800/80 border border-obsidian-700 text-white text-sm focus:border-gold focus:outline-none"
+                  onChange={setImageUrl}
+                  folder="categories"
+                  placeholder="Upload category image or paste URL"
+                  helperText="Displayed on storefront category tiles and collection banners"
                 />
-              </FormField>
+              </div>
 
               <FormField label="Description">
                 <textarea
