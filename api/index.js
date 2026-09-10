@@ -1,5 +1,24 @@
 // Monorepo-root Vercel entrypoint for the API project.
-// `turbo run build` emits the compiled Express app at this path.
-const { app } = require('../apps/api/dist/apps/api/src/app');
+let appInstance;
 
-module.exports = app;
+function getApp() {
+  if (!appInstance) {
+    let mod;
+    try {
+      mod = require('../apps/api/dist/apps/api/src/app');
+    } catch {
+      try {
+        mod = require('../apps/api/dist/src/app');
+      } catch {
+        mod = require('./apps/api/dist/apps/api/src/app');
+      }
+    }
+    appInstance = mod.default || mod.app || mod;
+  }
+  return appInstance;
+}
+
+module.exports = (req, res) => {
+  const app = getApp();
+  return app(req, res);
+};
