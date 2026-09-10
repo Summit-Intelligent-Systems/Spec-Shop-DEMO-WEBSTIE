@@ -117,12 +117,16 @@ export default function AdminLayout({
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [sessionVerified, setSessionVerified] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    // Session storage check: Requires explicit login verification each new browser session or tab visit
+    const isVerified = sessionStorage.getItem('xyz_admin_session_verified') === 'true';
+    setSessionVerified(isVerified);
   }, []);
 
-  const isAdmin = user && (user.role === 'SUPER_ADMIN' || user.role === 'ADMIN');
+  const isAdmin = sessionVerified && user && (user.role === 'SUPER_ADMIN' || user.role === 'ADMIN');
 
   const handleAdminLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,6 +188,8 @@ export default function AdminLayout({
       }
 
       if (authedUser && (authedUser.role === 'SUPER_ADMIN' || authedUser.role === 'ADMIN')) {
+        sessionStorage.setItem('xyz_admin_session_verified', 'true');
+        setSessionVerified(true);
         login(authedUser, token);
       } else {
         setAuthError('Invalid administrator credentials. Please check your email and password.');
@@ -436,7 +442,11 @@ export default function AdminLayout({
             <span>Store ↗</span>
           </a>
           <button
-            onClick={() => logout()}
+            onClick={() => {
+              sessionStorage.removeItem('xyz_admin_session_verified');
+              setSessionVerified(false);
+              logout();
+            }}
             className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-obsidian-500 hover:text-rose-400 hover:bg-rose-500/10 border border-obsidian-800 transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
