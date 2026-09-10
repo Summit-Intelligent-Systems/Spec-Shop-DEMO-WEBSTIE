@@ -22,6 +22,7 @@ const envSchema = z.object({
   // The demo API can boot without external services; production deployments
   // should override these with managed database and Redis URLs.
   DATABASE_URL: z.string().min(1).default('postgresql://localhost:5432/xyz_eyewear'),
+  DIRECT_URL: z.string().optional(),
   DATABASE_POOL_SIZE: z.coerce.number().default(10),
 
   // Redis
@@ -56,9 +57,15 @@ const envSchema = z.object({
   SMTP_FROM_EMAIL: z.string().email().default('noreply@xyzeyewear.com'),
 
   // Storage
-  STORAGE_DRIVER: z.enum(['local', 's3', 'cloudinary']).default('local'),
+  STORAGE_DRIVER: z.enum(['local', 's3', 'cloudinary', 'supabase']).default('local'),
   UPLOAD_DIR: z.string().default('uploads'),
   UPLOAD_MAX_SIZE_MB: z.coerce.number().default(10),
+
+  // Supabase
+  SUPABASE_URL: z.string().url().optional(),
+  SUPABASE_ANON_KEY: z.string().optional(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
+  SUPABASE_STORAGE_BUCKET: z.string().default('media'),
 
   // AWS S3
   AWS_ACCESS_KEY_ID: z.string().optional(),

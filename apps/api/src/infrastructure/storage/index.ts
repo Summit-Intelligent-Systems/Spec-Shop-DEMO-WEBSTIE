@@ -9,6 +9,7 @@ import path from 'path';
 import sharp from 'sharp';
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 export interface UploadResult {
   url: string;
@@ -135,16 +136,122 @@ class CloudinaryStorageDriver implements StorageDriver {
   }
 }
 
+// ─── Supabase Storage Driver ──────────────────────────────────────────────────
+
+class SupabaseStorageDriver implements StorageDriver {
+  private client: SupabaseClient | null = null;
+  private readonly bucket: string;
+
+  constructor() {
+    this.bucket = env.SUPABASE_STORAGE_BUCKET || 'media';
+    if (env.SUPABASE_URL && (env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY)) {
+      this.client = createClient(
+        env.SUPABASE_URL,
+        env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY || '',
+        {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+          },
+        },
+      );
+    } else {
+      logger.warn('⚠️ Supabase Storage driver selected but SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing.');
+    }
+  }
+
+  async upload(file: Express.Multer.File, folder = 'general'): Promise<UploadResult> {
+    if (!this.client) {
+      logger.warn('Supabase client unconfigured. Falling back to local storage.');
+      const localDriver = new LocalStorageDriver();
+      return localDriver.upload(file, folder);
+    }
+
+    const cleanFileName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const key = `${folder}/${Date.now()}-${cleanFileName}`;
+
+    let width: number | undefined;
+    let height: number | undefined;
+    let uploadBuffer = file.buffer;
+
+    if (file.mimetype.startsWith('image/')) {
+      try {
+        const image = sharp(file.buffer);
+        const metadata = await image.metadata();
+        width = metadata.width;
+        height = metadata.height;
+        if (file.mimetype !== 'image/webp') {
+          uploadBuffer = await image.webp({ quality: 85 }).toBuffer();
+        }
+      } catch (e) {
+        logger.warn('Sharp optimization skipped:', e);
+      }
+    }
+
+    const { data, error } = await this.client.storage
+      .from(this.bucket)
+      .upload(key, uploadBuffer, {
+        contentType: file.mimetype.startsWith('image/') ? 'image/webp' : file.mimetype,
+        upsert: true,
+      });
+
+    if (error) {
+      logger.error('Supabase storage upload error:', error);
+      throw new Error(`Supabase upload failed: ${error.message}`);
+    }
+
+    const { data: publicUrlData } = this.client.storage
+      .from(this.bucket)
+      .getPublicUrl(data.path);
+
+    return {
+      url: publicUrlData.publicUrl,
+      key: data.path,
+      size: uploadBuffer.length,
+      width,
+      height,
+      mimeType: file.mimetype.startsWith('image/') ? 'image/webp' : file.mimetype,
+    };
+  }
+
+  async delete(key: string): Promise<void> {
+    if (!this.client) return;
+    const { error } = await this.client.storage.from(this.bucket).remove([key]);
+    if (error) {
+      logger.error('Supabase storage delete error:', error);
+    }
+  }
+
+  async getSignedUrl(key: string, expiresInSeconds = 3600): Promise<string> {
+    if (!this.client) {
+      return `${env.SUPABASE_URL}/storage/v1/object/public/${this.bucket}/${key}`;
+    }
+    const { data, error } = await this.client.storage
+      .from(this.bucket)
+      .createSignedUrl(key, expiresInSeconds);
+    if (error || !data) {
+      const { data: pubData } = this.client.storage.from(this.bucket).getPublicUrl(key);
+      return pubData.publicUrl;
+    }
+    return data.signedUrl;
+  }
+}
+
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
 const createStorageDriver = (): StorageDriver => {
   switch (env.STORAGE_DRIVER) {
+    case 'supabase':
+      return new SupabaseStorageDriver();
     case 's3':
       return new S3StorageDriver();
     case 'cloudinary':
       return new CloudinaryStorageDriver();
     case 'local':
     default:
+      if (env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY) {
+        return new SupabaseStorageDriver();
+      }
       return new LocalStorageDriver();
   }
 };
