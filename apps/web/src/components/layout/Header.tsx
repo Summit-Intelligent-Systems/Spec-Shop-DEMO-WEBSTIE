@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingBag, Heart, User, Menu, Camera, ChevronDown } from 'lucide-react';
+import { Search, ShoppingBag, Heart, User, Menu, Camera, ChevronDown, Shield } from 'lucide-react';
 import { useUIStore } from '@/lib/store/uiStore';
 import { useCartStore } from '@/lib/store/cartStore';
+import { useAuthStore } from '@/lib/store/authStore';
 import { MegaMenu } from './MegaMenu';
 
 export const Header = () => {
@@ -14,6 +15,7 @@ export const Header = () => {
 
   const { openMobileNav, openSearch, openAuthModal } = useUIStore();
   const { openCart, getItemCount } = useCartStore();
+  const { user } = useAuthStore();
 
   useEffect(() => {
     setMounted(true);
@@ -145,14 +147,30 @@ export const Header = () => {
               <Heart className="w-5 h-5" />
             </Link>
 
+            {/* Admin Quick Link */}
+            {mounted && user && (user.role === 'SUPER_ADMIN' || user.role === 'ADMIN') && (
+              <Link
+                href="/admin"
+                className="px-2.5 py-1 rounded-full bg-gold/15 text-gold border border-gold/30 text-xs font-semibold hover:bg-gold hover:text-obsidian-950 transition-all flex items-center gap-1.5 shadow-sm shadow-gold/10"
+                title="Open Admin Portal"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
+            )}
+
             {/* User Account */}
             <button
               type="button"
               onClick={() => openAuthModal('login')}
-              className="p-2 text-obsidian-700 hover:text-gold hover:bg-obsidian-50 rounded-full transition-colors"
+              className="p-2 text-obsidian-700 hover:text-gold hover:bg-obsidian-50 rounded-full transition-colors relative"
               aria-label="Account sign in"
+              title={user ? `Signed in as ${user.email}` : 'Sign in'}
             >
               <User className="w-5 h-5" />
+              {user && (
+                <span className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+              )}
             </button>
 
             {/* Shopping Bag / Cart */}
