@@ -53,8 +53,9 @@ Handlebars.registerHelper('eq', (a: unknown, b: unknown) => a === b);
 const templateCache = new Map<string, HandlebarsTemplateDelegate>();
 
 const loadTemplate = (templateName: string): HandlebarsTemplateDelegate => {
-  if (templateCache.has(templateName)) {
-    return templateCache.get(templateName)!;
+  const cached = templateCache.get(templateName);
+  if (cached) {
+    return cached;
   }
 
   const templatePath = path.join(__dirname, 'templates', `${templateName}.hbs`);

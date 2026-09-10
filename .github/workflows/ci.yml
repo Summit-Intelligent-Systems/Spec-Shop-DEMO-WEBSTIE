@@ -10,6 +10,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  DATABASE_URL: postgresql://xyz_user:xyz_password@localhost:5432/xyz_test_db
+  DIRECT_URL: postgresql://xyz_user:xyz_password@localhost:5432/xyz_test_db
+  NODE_ENV: test
+
 jobs:
   # ─── Lint & Type Check ────────────────────────────────────────────────────────
   lint:
@@ -58,7 +63,7 @@ jobs:
           POSTGRES_USER: xyz_user
           POSTGRES_PASSWORD: xyz_password
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U xyz_user -d xyz_test_db"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -77,6 +82,7 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://xyz_user:xyz_password@localhost:5432/xyz_test_db
+      DIRECT_URL: postgresql://xyz_user:xyz_password@localhost:5432/xyz_test_db
       REDIS_URL: redis://localhost:6379
       JWT_SECRET: test_jwt_secret_at_least_32_characters_long
       JWT_REFRESH_SECRET: test_jwt_refresh_secret_at_least_32_characters
@@ -96,8 +102,11 @@ jobs:
         run: npm ci
 
       - name: Push DB schema
-        run: npm run db:push
+        run: npx prisma db push --accept-data-loss
         working-directory: apps/api
+        env:
+          DATABASE_URL: postgresql://xyz_user:xyz_password@localhost:5432/xyz_test_db
+          DIRECT_URL: postgresql://xyz_user:xyz_password@localhost:5432/xyz_test_db
 
       - name: Run tests
         run: npm test
