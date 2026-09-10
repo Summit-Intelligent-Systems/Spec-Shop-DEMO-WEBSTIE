@@ -36,15 +36,15 @@ export default function CheckoutPage() {
 
   // Form state
   const [formData, setFormData] = useState({
-    firstName: 'Devan',
-    lastName: 'Sharma',
-    email: 'devan.sharma@example.com',
-    phone: '+91 98765 43210',
-    address: '42, Indiranagar 100ft Road',
-    apartment: 'Apartment 4B, Prestige Heights',
-    city: 'Bengaluru',
-    state: 'Karnataka',
-    pincode: '560038',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    apartment: '',
+    city: '',
+    state: '',
+    pincode: '',
   });
 
   const [deliveryMethod, setDeliveryMethod] = useState<'express' | 'store'>('express');
@@ -52,9 +52,9 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Card details
-  const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8921');
-  const [cardExpiry, setCardExpiry] = useState('08/28');
-  const [cardCvv, setCardCvv] = useState('782');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvv, setCardCvv] = useState('');
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();

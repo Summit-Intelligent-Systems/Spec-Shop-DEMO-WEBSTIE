@@ -3,10 +3,12 @@ const SUPABASE_URL =
 
 const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  Buffer.from(
-    'c2JfcHVibGlzaGFibGVfcGdxblVhVG8yUllUbld1U2hsaFYwUV93cnBqRUIzTA==',
-    'base64',
-  ).toString('utf-8');
+  (typeof window !== 'undefined'
+    ? atob('c2JfcHVibGlzaGFibGVfcGdxblVhVG8yUllUbld1U2hsaFYwUV93cnBqRUIzTA==')
+    : Buffer.from(
+        'c2JfcHVibGlzaGFibGVfcGdxblVhVG8yUllUbld1U2hsaFYwUV93cnBqRUIzTA==',
+        'base64',
+      ).toString('utf-8'));
 
 const SUPABASE_STORAGE_BUCKET = 'media';
 
