@@ -99,7 +99,6 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       {value ? (
         <div className="relative group rounded-xl overflow-hidden border border-obsidian-700 bg-obsidian-900/60 p-2 flex items-center gap-3">
           <div className="w-16 h-16 rounded-lg bg-obsidian-800 flex-shrink-0 overflow-hidden border border-obsidian-700 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={value}
               alt="Preview"

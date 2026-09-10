@@ -496,7 +496,6 @@ export default function ProductForm({ productId, initialData }: ProductFormProps
                       key={imgIndex}
                       className="relative group rounded-xl overflow-hidden border border-obsidian-700 bg-obsidian-900 aspect-square"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={imgUrl}
                         alt={`Gallery ${imgIndex + 1}`}
