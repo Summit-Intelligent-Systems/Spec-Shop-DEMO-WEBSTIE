@@ -6,7 +6,7 @@ import { NotFoundError } from '../../shared/errors/AppError';
 
 export const ordersRouter = Router();
 
-const ORDERS_STORE: any[] = [
+export const ORDERS_STORE: any[] = [
   {
     id: 'XYZ-892104',
     orderNumber: 'XYZ-892104',
@@ -83,28 +83,54 @@ const ORDERS_STORE: any[] = [
   },
 ];
 
-ordersRouter.post('/', optionalAuth, (req: Request, res: Response): void => {
-  const { customer, shippingAddress, items, subtotal, shippingCharge, discount, total, paymentMethod } = req.body;
+ordersRouter.post('/', optionalAuth, async (req: Request, res: Response): Promise<void> => {
+  const { customer, shippingAddress, items, subtotal, shippingCharge, discount, total, paymentMethod, paymentStatus, deliveryMethod } = req.body;
   const orderNumber = `XYZ-${Math.floor(100000 + Math.random() * 900000)}`;
+
+  const determinedPaymentStatus = paymentStatus || (paymentMethod === 'COD' ? 'PENDING' : 'PAID');
 
   const newOrder = {
     id: orderNumber,
     orderNumber,
     userId: req.user?.id || 'guest',
-    customerName: customer?.name || `${customer?.firstName || 'Valued'} ${customer?.lastName || 'Client'}`,
+    customerName: customer?.name || `${customer?.firstName || 'Valued'} ${customer?.lastName || 'Client'}`.trim(),
     customerEmail: customer?.email || 'client@example.com',
     customerPhone: customer?.phone || '+91 98765 00000',
     shippingAddress: shippingAddress || {},
     items: items || [],
-    subtotal: subtotal || 0,
-    shippingCharge: shippingCharge || 0,
-    discount: discount || 0,
-    total: total || 0,
+    subtotal: Number(subtotal) || 0,
+    shippingCharge: Number(shippingCharge) || 0,
+    discount: Number(discount) || 0,
+    total: Number(total) || 0,
     status: 'CONFIRMED',
-    paymentStatus: 'PAID',
+    paymentStatus: determinedPaymentStatus,
     paymentMethod: paymentMethod || 'UPI',
+    deliveryMethod: deliveryMethod || 'STANDARD',
     createdAt: new Date().toISOString(),
   };
+
+  // Try saving to database asynchronously if available
+  try {
+    const { prisma } = await import('../../config/database');
+    if (prisma?.order) {
+      await (prisma.order as any).create({
+        data: {
+          orderNumber,
+          userId: req.user?.id || 'user-001',
+          status: 'PENDING',
+          paymentStatus: determinedPaymentStatus,
+          paymentMethod: paymentMethod || 'UPI',
+          shippingAddressId: shippingAddress?.id || 'addr-default',
+          subtotal: newOrder.subtotal,
+          shippingCharge: newOrder.shippingCharge,
+          discount: newOrder.discount,
+          total: newOrder.total,
+        },
+      }).catch(() => null);
+    }
+  } catch {
+    // Database offline/unreachable; in-memory store handles persistence
+  }
 
   ORDERS_STORE.unshift(newOrder);
   sendSuccess(res, newOrder, 201);

@@ -31,9 +31,7 @@ if (env.NODE_ENV === 'development') {
   });
 }
 
-// Reuse in dev (prevents Next.js hot reload from creating new connections)
-if (env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-}
+// Reuse across invocations and hot reloads (prevents connection pool exhaustion in serverless & dev)
+globalForPrisma.prisma = prisma;
 
 export default prisma;
