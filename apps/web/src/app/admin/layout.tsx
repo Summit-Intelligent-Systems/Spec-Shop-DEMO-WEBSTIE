@@ -34,6 +34,7 @@ import {
   Lock,
   Mail,
   Sparkles,
+  ExternalLink,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/authStore';
 
@@ -211,6 +212,29 @@ export default function AdminLayout({
 
   const isActive = (item: NavItem) =>
     item.exact ? pathname === item.href : pathname.startsWith(item.href);
+
+  const getSectionTitle = (path: string) => {
+    if (path === '/admin') return 'Overview';
+    if (path.startsWith('/admin/products/new')) return 'New Product';
+    if (path.startsWith('/admin/products')) return 'Products';
+    if (path.startsWith('/admin/categories')) return 'Categories';
+    if (path.startsWith('/admin/brands')) return 'Brands';
+    if (path.startsWith('/admin/inventory')) return 'Inventory';
+    if (path.startsWith('/admin/orders')) return 'Orders';
+    if (path.startsWith('/admin/customers')) return 'Customers';
+    if (path.startsWith('/admin/reviews')) return 'Reviews';
+    if (path.startsWith('/admin/coupons')) return 'Coupons';
+    if (path.startsWith('/admin/promotions')) return 'Promotions';
+    if (path.startsWith('/admin/homepage')) return 'Homepage Builder';
+    if (path.startsWith('/admin/pages')) return 'Content Pages';
+    if (path.startsWith('/admin/media')) return 'Media Library';
+    if (path.startsWith('/admin/navigation')) return 'Navigation';
+    if (path.startsWith('/admin/seo')) return 'SEO';
+    if (path.startsWith('/admin/settings')) return 'Settings';
+    if (path.startsWith('/admin/analytics')) return 'Analytics';
+    if (path.startsWith('/admin/prescriptions')) return 'Prescriptions';
+    return 'Dashboard';
+  };
 
   // If not authenticated as Admin, show Admin Login Portal
   if (mounted && !isAdmin) {
@@ -401,13 +425,16 @@ export default function AdminLayout({
           </div>
         </div>
         <div className="flex gap-2">
-          <Link
+          <a
             href="/"
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-obsidian-500 hover:text-white hover:bg-obsidian-800/60 border border-obsidian-800 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-obsidian-400 hover:text-white hover:bg-obsidian-800/60 border border-obsidian-800 transition-colors"
+            title="Open customer storefront in a new tab"
           >
             <Layers className="w-3.5 h-3.5" />
-            Storefront
-          </Link>
+            <span>Store ↗</span>
+          </a>
           <button
             onClick={() => logout()}
             className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-obsidian-500 hover:text-rose-400 hover:bg-rose-500/10 border border-obsidian-800 transition-colors"
@@ -456,21 +483,39 @@ export default function AdminLayout({
           </button>
 
           {/* Breadcrumb */}
-          <div className="hidden sm:flex items-center gap-2 text-xs uppercase tracking-widest text-obsidian-600 font-medium">
-            <Link href="/" className="hover:text-gold transition-colors">Storefront</Link>
+          <div className="hidden sm:flex items-center gap-2 text-xs tracking-wider text-obsidian-500 font-medium">
+            <Link
+              href="/admin"
+              className="text-gold hover:text-gold-300 transition-colors flex items-center gap-1.5 font-semibold"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>Admin Portal</span>
+            </Link>
             <ChevronRight className="w-3 h-3 text-obsidian-700" />
-            <span className="text-obsidian-400">Administration</span>
+            <span className="text-obsidian-300 font-medium">{getSectionTitle(pathname)}</span>
           </div>
 
           <div className="flex-1" />
 
           {/* Mobile brand */}
-          <div className="sm:hidden flex items-center gap-2">
+          <Link href="/admin" className="sm:hidden flex items-center gap-2">
             <Shield className="w-4 h-4 text-gold" />
             <span className="font-serif text-sm font-semibold text-white">XYZ Admin</span>
-          </div>
+          </Link>
 
           <div className="flex-1 sm:hidden" />
+
+          {/* Live Store link (opens in new tab) */}
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-obsidian-400 hover:text-gold hover:bg-obsidian-800/60 border border-obsidian-800 transition-colors"
+            title="Preview customer storefront in a new tab"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>View Live Store</span>
+          </a>
 
           {/* Search (desktop) */}
           <div className="hidden md:flex relative">

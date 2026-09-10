@@ -3,14 +3,7 @@ import Script from 'next/script';
 import { Cormorant_Garamond, Inter, JetBrains_Mono } from 'next/font/google';
 import { APP, SEO_DEFAULTS } from '@xyz-eyewear/config';
 import { Providers } from './providers';
-import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
-import { CartDrawer } from '@/components/layout/CartDrawer';
-import { SearchModal } from '@/components/layout/SearchModal';
-import { MobileNav } from '@/components/layout/MobileNav';
-import { AuthModal } from '@/components/auth/AuthModal';
-import { ChatWidget } from '@/components/chat/ChatWidget';
+import { StorefrontShell } from '@/components/layout/StorefrontShell';
 import '@/styles/globals.css';
 
 // ─── Font Configuration ───────────────────────────────────────────────────────
@@ -160,17 +153,9 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased text-obsidian-900 bg-white min-h-screen flex flex-col">
         <Providers>
-          <AnnouncementBar />
-          <Header />
-          <SearchModal />
-          <CartDrawer />
-          <MobileNav />
-          <AuthModal />
-          <div className="flex-1">
+          <StorefrontShell>
             {children}
-          </div>
-          <Footer />
-          <ChatWidget />
+          </StorefrontShell>
         </Providers>
         <Script
           id="razorpay-checkout-sdk"
