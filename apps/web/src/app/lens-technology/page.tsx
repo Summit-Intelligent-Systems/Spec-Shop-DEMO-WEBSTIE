@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import Link from 'next/link';
 import { Sparkles, Layers, ShieldCheck, ArrowRight, Gem, Feather } from 'lucide-react';
 
@@ -48,7 +48,7 @@ export default function LensTechnologyPage() {
           Materials & Craftsmanship
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-obsidian-300 font-light">
-          Where heritage artisanship converges with micro-precision optical engineering. Discover the noble materials that define XYZ Eyewear.
+          Where heritage artisanship converges with micro-precision optical engineering. Discover the noble materials that define Nayan Sukh Eyewear.
         </p>
       </div>
 

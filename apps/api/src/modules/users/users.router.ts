@@ -7,7 +7,7 @@ export const usersRouter = Router();
 const USER_PROFILES: Record<string, any> = {
   'user-001': {
     id: 'user-001',
-    email: 'customer@xyz.com',
+    email: 'customer@nayansukh.com',
     firstName: 'Devan',
     lastName: 'Sharma',
     phone: '+91 98765 43210',

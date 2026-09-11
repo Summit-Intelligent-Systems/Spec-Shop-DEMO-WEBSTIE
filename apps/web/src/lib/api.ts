@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 import { useAuthStore } from './store/authStore';
-import type { ApiResponse, ApiError } from '@xyz-eyewear/types';
+import type { ApiResponse, ApiError } from '@nayan-sukh-eyewear/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 

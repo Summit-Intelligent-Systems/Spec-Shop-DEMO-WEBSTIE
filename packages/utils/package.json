@@ -1,5 +1,5 @@
 {
-  "name": "@xyz-eyewear/utils",
+  "name": "@nayan-sukh-eyewear/utils",
   "version": "0.1.0",
   "private": true,
   "main": "./index.ts",

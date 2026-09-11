@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import Link from 'next/link';
 import { ShieldCheck, RotateCcw, Truck, Tag, HelpCircle, Phone, Mail } from 'lucide-react';
 
@@ -15,7 +15,7 @@ const FAQ_SECTIONS = [
     items: [
       {
         q: 'What does the 1-Year Unconditional Warranty cover?',
-        a: 'Every XYZ frame and lens package includes our full 1-year warranty covering manufacturing flaws, structural joint failure, and hinge mechanism issues. If an issue occurs, we repair or replace it free of charge either at any flagship salon or via complimentary doorstep pickup.',
+        a: 'Every Nayan Sukh frame and lens package includes our full 1-year warranty covering manufacturing flaws, structural joint failure, and hinge mechanism issues. If an issue occurs, we repair or replace it free of charge either at any flagship salon or via complimentary doorstep pickup.',
       },
       {
         q: 'What is the Zero-Error Prescription Guarantee?',
@@ -57,7 +57,7 @@ const FAQ_SECTIONS = [
     items: [
       {
         q: 'Do you offer any discount coupon codes?',
-        a: 'Yes! First-time patrons can enter promo code "LUXE15" at checkout to receive 15% off their first frame order when joining the XYZ Private Salon.',
+        a: 'Yes! First-time patrons can enter promo code "LUXE15" at checkout to receive 15% off their first frame order when joining the Nayan Sukh Private Salon.',
       },
       {
         q: 'Are your prices inclusive of GST?',
@@ -122,7 +122,7 @@ export default function FAQPage() {
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-obsidian-300">
               <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-gold" /> +91 98765 43210</span>
-              <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-gold" /> support@xyzeyewear.com</span>
+              <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-gold" /> support@nayansukheyewear.com</span>
             </div>
           </div>
           <Link

@@ -1,5 +1,5 @@
 /**
- * XYZ Eyewear — Authoritative Knowledge Base for RAG
+ * Nayan Sukh Eyewear — Authoritative Knowledge Base for RAG
  * Derived strictly from website resources:
  * - apps/web/src/lib/mockData.ts (Products, Categories, Face Shapes, Trust Pillars)
  * - apps/web/src/app/stores/page.tsx (Flagship Optical Boutiques)
@@ -172,7 +172,7 @@ Virtual 3D Try-On: Available.`,
     title: 'Eyewear Collections & Categories Overview',
     category: 'product',
     url: '/shop',
-    content: `XYZ Eyewear Collections:
+    content: `Nayan Sukh Eyewear Collections:
 1. Eyeglasses (/shop/eyeglasses): High-index prescription lenses & handcrafted designer frames in Japanese titanium and Italian acetate. Subcategories: Men, Women, Unisex, Kids, Titanium Collection, Zero Power.
 2. Sunglasses (/shop/sunglasses): Polarized 100% UV400 sun protection with runway silhouettes. Subcategories: Aviators, Wayfarer, Cat-Eye, Polarized, Gradient.
 3. Screen Glasses (/shop/screen-glasses): Combat digital eye fatigue with precision 420nm blue-light filtering. Subcategories: Zero Power, With Prescription, Ultralight TR90, Gamer Edition.
@@ -240,7 +240,7 @@ Stand in front of a mirror and place any standard credit/bank card vertically ag
     title: 'Prescription Types, Lens Indices & Coating Options',
     category: 'lens-technology',
     url: '/prescription-guide',
-    content: `Prescription Options, Lens Indices and Protective Coatings at XYZ Eyewear:
+    content: `Prescription Options, Lens Indices and Protective Coatings at Nayan Sukh Eyewear:
 
 Vision Types Available:
 1. Zero Power / Digital Screen (₹0 extra): Complete blue-light & UV400 defense for digital screen users without corrective power.
@@ -271,7 +271,7 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
     title: 'Clinical 20-Step Eye Examination (100% Complimentary)',
     category: 'service',
     url: '/book-eye-test',
-    content: `XYZ Clinical Eye Examination:
+    content: `Nayan Sukh Clinical Eye Examination:
 - 100% Complimentary: Our comprehensive 20-step computerized eye examination is completely free of charge.
 - 20-Step Certified Protocol: Includes automated corneal topography, digital refraction, intraocular pressure screening, and retina wellness check performed by certified optometrists.
 - Zero-Error Guarantee: Prescriptions are backed by our zero-error accuracy guarantee.
@@ -289,12 +289,12 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
     title: 'Flagship Optical Stores & Locations',
     category: 'store',
     url: '/stores',
-    content: `XYZ Flagship Optical Boutiques & Store Locations:
+    content: `Nayan Sukh Flagship Optical Boutiques & Store Locations:
 
 1. Bengaluru Boutique (Flagship):
 - Name: Indiranagar Flagship Boutique
 - Address: 42, 100ft Road, Indiranagar, Stage 2, Bengaluru, Karnataka 560038
-- Phone: +91 80 4123 4567 | Email: indiranagar@xyz-eyewear.com
+- Phone: +91 80 4123 4567 | Email: indiranagar@nayan-sukh-eyewear.com
 - Hours: 10:00 AM – 9:00 PM (Mon–Sat) • 11:00 AM – 7:00 PM (Sun)
 - Services: Comprehensive 20-Step Eye Exam, Virtual Try-On Suite, Bespoke Engraving, Home Delivery, Frame Adjustment
 - Rating: 4.9/5
@@ -302,7 +302,7 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
 2. Mumbai Boutique:
 - Name: Linking Road Maison
 - Address: 17, Linking Road, Bandra West, Mumbai, Maharashtra 400050
-- Phone: +91 22 2655 1234 | Email: bandra@xyz-eyewear.com
+- Phone: +91 22 2655 1234 | Email: bandra@nayan-sukh-eyewear.com
 - Hours: 10:30 AM – 9:30 PM (All Days)
 - Services: Eye Exam, Contact Lens Fitting, Lens Replacement, Insurance Claims
 - Rating: 4.7/5
@@ -310,7 +310,7 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
 3. New Delhi Studio (Flagship):
 - Name: Khan Market Studio
 - Address: Shop 34, Middle Lane, Khan Market, New Delhi, Delhi 110003
-- Phone: +91 11 2461 7890 | Email: khanmarket@xyz-eyewear.com
+- Phone: +91 11 2461 7890 | Email: khanmarket@nayan-sukh-eyewear.com
 - Hours: 11:00 AM – 8:30 PM (Mon–Sat) • Closed on Sundays
 - Services: Comprehensive Eye Exam, Titanium Collection Showcase, Express Lens Lab
 - Rating: 4.8/5
@@ -318,7 +318,7 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
 4. Hyderabad Lounge:
 - Name: Jubilee Hills Optical Lounge
 - Address: Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033
-- Phone: +91 40 2354 5678 | Email: jubileehills@xyz-eyewear.com
+- Phone: +91 40 2354 5678 | Email: jubileehills@nayan-sukh-eyewear.com
 - Hours: 10:00 AM – 8:00 PM (All Days)
 - Services: Eye Exam, Sunglasses Bar, Kids Eyewear Corner
 - Rating: 4.6/5`,
@@ -331,7 +331,7 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
     title: 'Materials, Metallurgy & Master Craftsmanship',
     category: 'craftsmanship',
     url: '/lens-technology',
-    content: `XYZ Eyewear Materials and Engineering Standards:
+    content: `Nayan Sukh Eyewear Materials and Engineering Standards:
 1. Italian Mazzucchelli Acetate:
 - Sourced exclusively from the historic Mazzucchelli workshop in Castiglione Olona, Italy.
 - Made from organic cotton-based cellulose acetate.
@@ -361,7 +361,7 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
     title: 'Warranty, Return Policy, Shipping Charges & Promo Codes',
     category: 'policy',
     url: '/faq',
-    content: `XYZ Eyewear Store Policies, Guarantees and Offers:
+    content: `Nayan Sukh Eyewear Store Policies, Guarantees and Offers:
 
 1. 1-Year Unconditional Warranty:
 - Full 1-year coverage against any manufacturing defects and frame structural issues on all acetate and titanium frames.
@@ -378,14 +378,14 @@ You can enter prescription values manually (SPH, CYL, Axis, Add, PD), upload a p
 
 4. Exclusive Discount Promo Code:
 - Promo Code: "LUXE15"
-- Benefit: 15% discount on your first frame purchase when joining the XYZ Private Salon.
+- Benefit: 15% discount on your first frame purchase when joining the Nayan Sukh Private Salon.
 
 5. Tax & Pricing Transparency:
 - All prices displayed are inclusive of 18% GST. No hidden fees at checkout.
 
 6. Customer Support Concierge:
 - Phone: +91 98765 43210
-- Email: support@xyzeyewear.com
+- Email: support@nayansukheyewear.com
 - Available 7 days a week, 9:00 AM to 9:00 PM IST.`,
     tags: ['warranty', 'returns', 'shipping', 'discount', 'promo code', 'luxe15', '14 days', '1 year', 'support', 'gst'],
   },

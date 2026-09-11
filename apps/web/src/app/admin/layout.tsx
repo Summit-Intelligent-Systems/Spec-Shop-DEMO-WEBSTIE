@@ -112,7 +112,7 @@ export default function AdminLayout({
   const { user, login, logout } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
-  const [adminEmail, setAdminEmail] = useState('superadmin@xyzeyewear.com');
+  const [adminEmail, setAdminEmail] = useState('superadmin@nayansukheyewear.com');
   const [adminPassword, setAdminPassword] = useState('Admin@123!');
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -122,7 +122,7 @@ export default function AdminLayout({
   useEffect(() => {
     setMounted(true);
     // Session storage check: Requires explicit login verification each new browser session or tab visit
-    const isVerified = sessionStorage.getItem('xyz_admin_session_verified') === 'true';
+    const isVerified = sessionStorage.getItem('nayansukh_admin_session_verified') === 'true';
     setSessionVerified(isVerified);
   }, []);
 
@@ -137,7 +137,7 @@ export default function AdminLayout({
       const apiBase =
         process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, '') || 'http://localhost:4000/api/v1';
       let authedUser: any = null;
-      let token = 'xyz_admin_session_' + Date.now();
+      let token = 'nayansukh_admin_session_' + Date.now();
 
       try {
         const res = await fetch(`${apiBase}/auth/login`, {
@@ -156,10 +156,10 @@ export default function AdminLayout({
 
       if (!authedUser) {
         const lower = adminEmail.trim().toLowerCase();
-        if (lower === 'superadmin@xyzeyewear.com' && adminPassword === 'Admin@123!') {
+        if (lower === 'superadmin@nayansukheyewear.com' && adminPassword === 'Admin@123!') {
           authedUser = {
             id: 'cmtv9n3q80000h8g58ixai7dn',
-            email: 'superadmin@xyzeyewear.com',
+            email: 'superadmin@nayansukheyewear.com',
             role: 'SUPER_ADMIN',
             isVerified: true,
             twoFactorEnabled: false,
@@ -170,10 +170,10 @@ export default function AdminLayout({
               lastName: 'Executive',
             },
           };
-        } else if (lower === 'admin@xyzeyewear.com' && adminPassword === 'Admin@123!') {
+        } else if (lower === 'admin@nayansukheyewear.com' && adminPassword === 'Admin@123!') {
           authedUser = {
             id: 'cmtv9n3q80001h8g58ixai7do',
-            email: 'admin@xyzeyewear.com',
+            email: 'admin@nayansukheyewear.com',
             role: 'ADMIN',
             isVerified: true,
             twoFactorEnabled: false,
@@ -188,7 +188,7 @@ export default function AdminLayout({
       }
 
       if (authedUser && (authedUser.role === 'SUPER_ADMIN' || authedUser.role === 'ADMIN')) {
-        sessionStorage.setItem('xyz_admin_session_verified', 'true');
+        sessionStorage.setItem('nayansukh_admin_session_verified', 'true');
         setSessionVerified(true);
         login(authedUser, token);
       } else {
@@ -257,7 +257,7 @@ export default function AdminLayout({
               <Shield className="w-7 h-7 text-obsidian-950" />
             </div>
             <h1 className="font-serif text-2xl font-bold text-white tracking-wide">
-              XYZ Atelier
+              Nayan Sukh Atelier
             </h1>
             <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase mt-1">
               Admin & CMS Portal
@@ -286,7 +286,7 @@ export default function AdminLayout({
                   type="email"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
-                  placeholder="admin@xyzeyewear.com"
+                  placeholder="admin@nayansukheyewear.com"
                   required
                   className="w-full pl-10 pr-4 py-2.5 bg-obsidian-800/80 border border-obsidian-700/60 rounded-xl text-sm text-white placeholder-obsidian-500 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all"
                 />
@@ -315,7 +315,7 @@ export default function AdminLayout({
               <button
                 type="button"
                 onClick={() => {
-                  setAdminEmail('superadmin@xyzeyewear.com');
+                  setAdminEmail('superadmin@nayansukheyewear.com');
                   setAdminPassword('Admin@123!');
                 }}
                 className="text-gold-400 hover:text-gold flex items-center gap-1 transition-colors"
@@ -379,7 +379,7 @@ export default function AdminLayout({
           </div>
           <div>
             <span className="font-serif text-base font-semibold text-white block leading-tight">
-              XYZ Atelier
+              Nayan Sukh Atelier
             </span>
             <span className="text-[10px] font-bold tracking-[0.15em] text-gold-400 uppercase">
               Admin Panel
@@ -426,7 +426,7 @@ export default function AdminLayout({
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">{displayName}</p>
             <p className="text-[10px] text-obsidian-500 truncate">
-              {roleLabel} • <span className="text-obsidian-600">{user?.email || 'admin@xyz.com'}</span>
+              {roleLabel} • <span className="text-obsidian-600">{user?.email || 'admin@nayansukh.com'}</span>
             </p>
           </div>
         </div>
@@ -443,7 +443,7 @@ export default function AdminLayout({
           </a>
           <button
             onClick={() => {
-              sessionStorage.removeItem('xyz_admin_session_verified');
+              sessionStorage.removeItem('nayansukh_admin_session_verified');
               setSessionVerified(false);
               logout();
             }}
@@ -510,7 +510,7 @@ export default function AdminLayout({
           {/* Mobile brand */}
           <Link href="/admin" className="sm:hidden flex items-center gap-2">
             <Shield className="w-4 h-4 text-gold" />
-            <span className="font-serif text-sm font-semibold text-white">XYZ Admin</span>
+            <span className="font-serif text-sm font-semibold text-white">Nayan Sukh Admin</span>
           </Link>
 
           <div className="flex-1 sm:hidden" />

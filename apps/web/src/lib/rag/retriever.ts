@@ -1,5 +1,5 @@
 /**
- * XYZ Eyewear — Hybrid RAG Retriever
+ * Nayan Sukh Eyewear — Hybrid RAG Retriever
  *
  * Combines:
  * 1. Dense Semantic Vector Search (Cosine similarity over 384-dimensional neural embeddings)

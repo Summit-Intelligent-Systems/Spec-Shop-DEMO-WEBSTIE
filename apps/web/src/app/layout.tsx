@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Cormorant_Garamond, Inter, JetBrains_Mono } from 'next/font/google';
-import { APP, SEO_DEFAULTS } from '@xyz-eyewear/config';
+import { APP, SEO_DEFAULTS } from '@nayan-sukh-eyewear/config';
 import { Providers } from './providers';
 import { StorefrontShell } from '@/components/layout/StorefrontShell';
 import '@/styles/globals.css';
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     'designer frames',
     'eye care',
     'optical store',
-    'XYZ Eyewear',
+    'Nayan Sukh Eyewear',
     'buy glasses online',
   ],
   authors: [{ name: APP.NAME, url: APP.URL }],

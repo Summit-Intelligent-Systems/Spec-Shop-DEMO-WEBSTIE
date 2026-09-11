@@ -6,7 +6,7 @@ export const membershipRouter = Router();
 const PLANS = [
   {
     id: 'plan-gold',
-    name: 'XYZ Gold Club',
+    name: 'Nayan Sukh Gold Club',
     price: 1999,
     durationMonths: 12,
     benefits: [
@@ -18,7 +18,7 @@ const PLANS = [
   },
   {
     id: 'plan-platinum',
-    name: 'XYZ Platinum Concierge',
+    name: 'Nayan Sukh Platinum Concierge',
     price: 3999,
     durationMonths: 12,
     benefits: [

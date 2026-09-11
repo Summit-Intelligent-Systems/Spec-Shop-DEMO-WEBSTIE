@@ -1,5 +1,5 @@
 /**
- * Razorpay Client SDK Utility for XYZ Eyewear
+ * Razorpay Client SDK Utility for Nayan Sukh Eyewear
  */
 
 export interface RazorpayPrefill {
@@ -103,7 +103,7 @@ export const launchRazorpayPayment = async (
     key: options.key,
     amount: options.amount,
     currency: options.currency || 'INR',
-    name: options.name || 'XYZ Eyewear',
+    name: options.name || 'Nayan Sukh Eyewear',
     description: options.description || 'Artisanal Optical & Sunwear Order',
     image: options.image || '/favicon.ico',
     prefill: options.prefill,

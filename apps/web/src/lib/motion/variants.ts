@@ -1,5 +1,5 @@
 /**
- * Framer Motion animation variants for XYZ Eyewear.
+ * Framer Motion animation variants for Nayan Sukh Eyewear.
  * Consistent, premium animations used across all components.
  */
 

@@ -105,7 +105,7 @@ export default function AccountOverviewPage() {
               Live Optical Production Status
             </div>
             <h3 className="font-serif text-xl font-medium text-obsidian-950">
-              Order #XYZ-88219 — The Sovereign Round
+              Order #NS-88219 — The Sovereign Round
             </h3>
             <p className="text-xs text-obsidian-500 mt-0.5">
               Single Vision 1.74 High Index • Zeiss DuraVision BlueProtect • Prescription Verified

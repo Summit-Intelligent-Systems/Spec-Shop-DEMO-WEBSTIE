@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import { CATEGORIES } from '@/lib/mockData';
 import { ShopCatalogClient } from '../ShopCatalogClient';
 

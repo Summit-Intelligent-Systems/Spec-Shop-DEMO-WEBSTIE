@@ -105,7 +105,7 @@ export default function CheckoutPage() {
           paymentStatus: 'PENDING',
         }).catch(() => null);
 
-        const orderId = orderRes?.orderNumber || orderRes?.id || `XYZ-${Math.floor(100000 + Math.random() * 900000)}`;
+        const orderId = orderRes?.orderNumber || orderRes?.id || `NS-${Math.floor(100000 + Math.random() * 900000)}`;
         clearCart();
         setIsProcessing(false);
         toast.success('Order placed successfully via Cash on Delivery!');
@@ -159,7 +159,7 @@ export default function CheckoutPage() {
         amount: paymentOrder?.amount || grandTotal * 100,
         currency: paymentOrder?.currency || 'INR',
         order_id: paymentOrder?.orderId && paymentOrder.orderId.startsWith('order_') ? paymentOrder.orderId : undefined,
-        name: 'XYZ Eyewear',
+        name: 'Nayan Sukh Eyewear',
         description: `Handcrafted Optical Allocation (₹${grandTotal.toLocaleString('en-IN')})`,
         prefill: {
           name: `${formData.firstName} ${formData.lastName}`.trim(),
@@ -203,12 +203,12 @@ export default function CheckoutPage() {
             }).catch(() => null);
 
             toast.success('Payment verified & order confirmed!', { id: 'rzp-verify' });
-            const orderId = orderRes?.orderNumber || orderRes?.id || `XYZ-${Math.floor(100000 + Math.random() * 900000)}`;
+            const orderId = orderRes?.orderNumber || orderRes?.id || `NS-${Math.floor(100000 + Math.random() * 900000)}`;
             clearCart();
             setIsProcessing(false);
             router.push(`/order-success/${orderId}`);
           } catch {
-            const fallbackOrderId = `XYZ-${Math.floor(100000 + Math.random() * 900000)}`;
+            const fallbackOrderId = `NS-${Math.floor(100000 + Math.random() * 900000)}`;
             clearCart();
             setIsProcessing(false);
             router.push(`/order-success/${fallbackOrderId}`);
@@ -263,7 +263,7 @@ export default function CheckoutPage() {
         {/* Header Branding & Security Seal */}
         <div className="flex items-center justify-between pb-8 border-b border-obsidian-200/80 mb-8">
           <Link href="/" className="font-serif text-2xl tracking-widest uppercase font-medium text-obsidian-950">
-            XYZ <span className="text-xs tracking-[0.3em] font-sans text-gold">Eyewear</span>
+            Nayan Sukh <span className="text-xs tracking-[0.3em] font-sans text-gold">Eyewear</span>
           </Link>
           <div className="flex items-center gap-2 text-xs text-obsidian-600 font-semibold bg-white px-3.5 py-1.5 rounded-full border border-obsidian-200 shadow-xs">
             <Lock className="w-3.5 h-3.5 text-emerald-600" />

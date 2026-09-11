@@ -13,7 +13,7 @@ export const authRouter = Router();
 const DEMO_USERS = [
   {
     id: 'user-001',
-    email: 'customer@xyz.com',
+    email: 'customer@nayansukh.com',
     passwordHash: '$2a$10$wT5gQ9/KkK6nJtP5Q6YFKeB1gQyYlR3F2xQ2zC3D4E5F6G7H8I9J0', // Password123!
     firstName: 'Devan',
     lastName: 'Sharma',
@@ -22,7 +22,7 @@ const DEMO_USERS = [
   },
   {
     id: 'admin-001',
-    email: 'admin@xyz.com',
+    email: 'admin@nayansukh.com',
     passwordHash: '$2a$10$wT5gQ9/KkK6nJtP5Q6YFKeB1gQyYlR3F2xQ2zC3D4E5F6G7H8I9J0', // Password123!
     firstName: 'Aditya',
     lastName: 'Pathak',
@@ -170,7 +170,7 @@ authRouter.post(
       }
 
       // Default mock login fallback if credentials match demo
-      if (!user && (email === 'admin@xyz.com' || email === 'customer@xyz.com' || password === 'Password123!')) {
+      if (!user && (email === 'admin@nayansukh.com' || email === 'customer@nayansukh.com' || password === 'Password123!')) {
         const isAdmin = email.includes('admin');
         user = {
           id: isAdmin ? 'admin-001' : 'user-001',

@@ -31,7 +31,7 @@ async function bootstrap() {
     }
 
     const server = app.listen(PORT, () => {
-      logger.info(`🚀 XYZ Eyewear API running on http://localhost:${PORT}`);
+      logger.info(`🚀 Nayan Sukh Eyewear API running on http://localhost:${PORT}`);
       logger.info(`📖 API Docs: http://localhost:${PORT}/api-docs`);
       logger.info(`🌍 Environment: ${env.NODE_ENV}`);
     });

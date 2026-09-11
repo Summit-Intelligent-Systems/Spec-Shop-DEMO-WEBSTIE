@@ -42,7 +42,7 @@ export const MobileNav = () => {
             <div className="p-5 border-b border-obsidian-100 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="font-serif text-lg font-bold tracking-widest text-obsidian-900">
-                  XYZ
+                  Nayan Sukh
                 </span>
                 <span className="text-[10px] uppercase font-semibold text-gold tracking-widest">
                   Eyewear

@@ -1,5 +1,5 @@
 /**
- * XYZ Eyewear — Neural Embeddings & Vector Similarity Engine
+ * Nayan Sukh Eyewear — Neural Embeddings & Vector Similarity Engine
  *
  * Implements:
  * 1. 384-dimensional dense semantic embedding generation

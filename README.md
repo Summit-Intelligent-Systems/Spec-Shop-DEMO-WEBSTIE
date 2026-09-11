@@ -1,8 +1,8 @@
-# XYZ Eyewear — Premium E-Commerce Platform
+# Nayan Sukh Eyewear — Premium E-Commerce Platform
 
 <div align="center">
 
-![XYZ Eyewear](./docs/banner.png)
+![Nayan Sukh Eyewear](./docs/banner.png)
 
 **A world-class, production-grade full-stack e-commerce platform for a premium eyewear brand.**
 
@@ -21,7 +21,7 @@
 This is a **Turborepo monorepo** containing:
 
 ```
-xyz-eyewear/
+nayan-sukh-eyewear/
 ├── apps/
 │   ├── web/          # Next.js 14 frontend (App Router)
 │   └── api/          # Express.js + TypeScript REST API
@@ -45,8 +45,8 @@ xyz-eyewear/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/your-org/xyz-eyewear.git
-cd xyz-eyewear
+git clone https://github.com/your-org/nayan-sukh-eyewear.git
+cd nayan-sukh-eyewear
 npm install
 ```
 
@@ -226,4 +226,4 @@ This is a proprietary codebase. Contact the development team for contribution gu
 
 ## 📄 License
 
-Proprietary — All rights reserved. © 2024 XYZ Eyewear.
+Proprietary — All rights reserved. © 2024 Nayan Sukh Eyewear.

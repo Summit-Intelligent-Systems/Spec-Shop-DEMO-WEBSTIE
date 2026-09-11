@@ -6,9 +6,9 @@ import { NotFoundError } from '../../shared/errors/AppError';
 export const brandsRouter = Router();
 
 const FALLBACK_BRANDS = [
-  { id: 'brand-1', name: 'XYZ Masterworks', slug: 'xyz-masterworks', description: 'Heritage Japanese titanium & Italian acetate frames' },
-  { id: 'brand-2', name: 'XYZ Haute', slug: 'xyz-haute', description: 'Runway avant-garde silhouettes' },
-  { id: 'brand-3', name: 'XYZ Clinical', slug: 'xyz-clinical', description: 'Engineered blue-light & ergonomic frames' },
+  { id: 'brand-1', name: 'Nayan Sukh Masterworks', slug: 'nayan-sukh-masterworks', description: 'Heritage Japanese titanium & Italian acetate frames' },
+  { id: 'brand-2', name: 'Nayan Sukh Haute', slug: 'nayan-sukh-haute', description: 'Runway avant-garde silhouettes' },
+  { id: 'brand-3', name: 'Nayan Sukh Clinical', slug: 'nayan-sukh-clinical', description: 'Engineered blue-light & ergonomic frames' },
 ];
 
 brandsRouter.get('/', async (_req: Request, res: Response, next: NextFunction): Promise<void> => {

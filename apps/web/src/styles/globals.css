@@ -157,7 +157,7 @@
 @layer components {
 
   /* Container */
-  .container-xyz {
+  .container-nayansukh {
     @apply w-full max-w-content mx-auto px-4 sm:px-6 lg:px-8 xl:px-12;
   }
 

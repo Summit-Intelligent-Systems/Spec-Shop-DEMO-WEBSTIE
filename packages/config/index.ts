@@ -1,25 +1,25 @@
 /**
- * @xyz-eyewear/config
+ * @nayan-sukh-eyewear/config
  * Shared constants and configuration used across web and api apps.
  */
 
 // ─── App Identity ─────────────────────────────────────────────────────────────
 
 export const APP = {
-  NAME: 'XYZ Eyewear',
+  NAME: 'Nayan Sukh Eyewear',
   TAGLINE: 'See the World in Style',
   DESCRIPTION:
     'Premium eyewear crafted for those who see the world differently. Discover frames that define you.',
-  URL: process.env.NEXT_PUBLIC_APP_URL || 'https://xyzeyewear.com',
+  URL: process.env.NEXT_PUBLIC_APP_URL || 'https://nayansukheyewear.com',
   API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1',
-  SUPPORT_EMAIL: 'support@xyzeyewear.com',
+  SUPPORT_EMAIL: 'support@nayansukheyewear.com',
   SUPPORT_PHONE: '+91 98765 43210',
   SOCIAL: {
-    INSTAGRAM: 'https://instagram.com/xyzeyewear',
-    FACEBOOK: 'https://facebook.com/xyzeyewear',
-    TWITTER: 'https://twitter.com/xyzeyewear',
-    YOUTUBE: 'https://youtube.com/@xyzeyewear',
-    PINTEREST: 'https://pinterest.com/xyzeyewear',
+    INSTAGRAM: 'https://instagram.com/nayansukheyewear',
+    FACEBOOK: 'https://facebook.com/nayansukheyewear',
+    TWITTER: 'https://twitter.com/nayansukheyewear',
+    YOUTUBE: 'https://youtube.com/@nayansukheyewear',
+    PINTEREST: 'https://pinterest.com/nayansukheyewear',
   },
 } as const;
 
@@ -107,14 +107,14 @@ export const PRODUCT = {
 // ─── SEO Defaults ─────────────────────────────────────────────────────────────
 
 export const SEO_DEFAULTS = {
-  TITLE_TEMPLATE: '%s | XYZ Eyewear',
-  DEFAULT_TITLE: 'XYZ Eyewear — Premium Eyewear Brand',
+  TITLE_TEMPLATE: '%s | Nayan Sukh Eyewear',
+  DEFAULT_TITLE: 'Nayan Sukh Eyewear — Premium Eyewear Brand',
   DEFAULT_DESCRIPTION:
-    'Shop premium eyeglasses, sunglasses, and contact lenses at XYZ Eyewear. Virtual try-on, free eye tests, and exclusive designer collections.',
+    'Shop premium eyeglasses, sunglasses, and contact lenses at Nayan Sukh Eyewear. Virtual try-on, free eye tests, and exclusive designer collections.',
   OG_IMAGE: '/images/og-default.jpg',
-  TWITTER_HANDLE: '@xyzeyewear',
+  TWITTER_HANDLE: '@nayansukheyewear',
   TWITTER_CARD: 'summary_large_image',
-  CANONICAL_URL: 'https://xyzeyewear.com',
+  CANONICAL_URL: 'https://nayansukheyewear.com',
 } as const;
 
 // ─── Navigation ───────────────────────────────────────────────────────────────

@@ -25,9 +25,9 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@xyz-eyewear/types": ["../../packages/types"],
-      "@xyz-eyewear/utils": ["../../packages/utils"],
-      "@xyz-eyewear/config": ["../../packages/config"]
+      "@nayan-sukh-eyewear/types": ["../../packages/types"],
+      "@nayan-sukh-eyewear/utils": ["../../packages/utils"],
+      "@nayan-sukh-eyewear/config": ["../../packages/config"]
     }
   },
   "include": ["src/**/*", "api/**/*", "prisma/seed.ts"],

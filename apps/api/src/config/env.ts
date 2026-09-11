@@ -60,8 +60,8 @@ const envSchema = z.object({
   SMTP_SECURE: z.coerce.boolean().default(false),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
-  SMTP_FROM_NAME: z.string().default('XYZ Eyewear'),
-  SMTP_FROM_EMAIL: z.string().email().default('noreply@xyzeyewear.com'),
+  SMTP_FROM_NAME: z.string().default('Nayan Sukh Eyewear'),
+  SMTP_FROM_EMAIL: z.string().email().default('noreply@nayansukheyewear.com'),
 
   // Storage
   STORAGE_DRIVER: z.enum(['local', 's3', 'cloudinary', 'supabase']).default('supabase'),
@@ -99,7 +99,7 @@ const envSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().optional(),
   CLOUDINARY_API_KEY: z.string().optional(),
   CLOUDINARY_API_SECRET: z.string().optional(),
-  CLOUDINARY_BASE_FOLDER: z.string().default('xyz-eyewear'),
+  CLOUDINARY_BASE_FOLDER: z.string().default('nayan-sukh-eyewear'),
 
   // Payment
   PAYMENT_DRIVER: z.enum(['mock', 'razorpay', 'stripe', 'paypal']).default('mock'),

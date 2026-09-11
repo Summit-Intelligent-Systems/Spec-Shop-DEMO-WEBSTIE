@@ -38,7 +38,7 @@ const INITIAL_PRESCRIPTIONS: Prescription[] = [
     os: { sphere: '-2.00', cylinder: '-0.75', axis: '175°' },
     pd: 63,
     doctorName: 'Dr. Sarah Chen, OD',
-    clinic: 'XYZ Flagship Optometry Clinic, Bengaluru',
+    clinic: 'Nayan Sukh Flagship Optometry Clinic, Bengaluru',
     issueDate: 'Oct 14, 2025',
     expiryDate: 'Oct 14, 2027',
     isVerified: true,

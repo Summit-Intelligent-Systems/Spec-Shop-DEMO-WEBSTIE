@@ -37,7 +37,7 @@ export default function AccountLayout({
   const displayName = user?.profile?.firstName 
     ? `${user.profile.firstName} ${user.profile.lastName || ''}`.trim()
     : 'Sophia Vane';
-  const email = user?.email || 'vip.client@xyzeyewear.com';
+  const email = user?.email || 'vip.client@nayansukheyewear.com';
 
   return (
     <div className="min-h-screen bg-obsidian-50/50 py-8 lg:py-14">

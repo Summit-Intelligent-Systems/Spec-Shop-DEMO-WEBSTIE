@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import { EyeCareBanner } from '@/components/home/EyeCareBanner';
 import Link from 'next/link';
 import { ShieldCheck, MapPin, Award } from 'lucide-react';

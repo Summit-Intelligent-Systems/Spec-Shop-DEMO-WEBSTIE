@@ -13,7 +13,7 @@ export const HeroSlider = () => {
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero-banner.jpg"
-          alt="XYZ Eyewear Master Collection"
+          alt="Nayan Sukh Eyewear Master Collection"
           fill
           priority
           className="object-cover object-center opacity-60 scale-105"

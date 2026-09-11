@@ -100,7 +100,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
               </p>
             </div>
             <a
-              href="https://wa.me/?text=Hello%20XYZ%20Eyewear,%20I%20would%20like%20to%20submit%20my%20prescription%20for%20order%20"
+              href="https://wa.me/?text=Hello%20Nayan%20Sukh%20Eyewear,%20I%20would%20like%20to%20submit%20my%20prescription%20for%20order%20"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold whitespace-nowrap hover:bg-emerald-700 transition-colors shrink-0"

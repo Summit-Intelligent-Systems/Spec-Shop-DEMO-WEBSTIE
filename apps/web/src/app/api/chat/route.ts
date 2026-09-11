@@ -1,5 +1,5 @@
 /**
- * XYZ Eyewear — Production RAG Chatbot API Route
+ * Nayan Sukh Eyewear — Production RAG Chatbot API Route
  * POST /api/chat
  */
 

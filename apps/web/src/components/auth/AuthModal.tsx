@@ -50,7 +50,7 @@ export const AuthModal = () => {
             : { email, password };
 
         let authedUser: any = null;
-        let token = 'xyz_session_token_' + Date.now();
+        let token = 'nayansukh_session_token_' + Date.now();
 
         try {
           const res = await fetch(endpoint, {
@@ -69,10 +69,10 @@ export const AuthModal = () => {
 
         if (!authedUser) {
           const lowerEmail = (email || '').trim().toLowerCase();
-          if (lowerEmail === 'superadmin@xyzeyewear.com' && (password === 'Admin@123!' || !password)) {
+          if (lowerEmail === 'superadmin@nayansukheyewear.com' && (password === 'Admin@123!' || !password)) {
             authedUser = {
               id: 'cmtv9n3q80000h8g58ixai7dn',
-              email: 'superadmin@xyzeyewear.com',
+              email: 'superadmin@nayansukheyewear.com',
               role: 'SUPER_ADMIN',
               isVerified: true,
               twoFactorEnabled: false,
@@ -83,10 +83,10 @@ export const AuthModal = () => {
                 lastName: 'Executive',
               },
             };
-          } else if (lowerEmail === 'admin@xyzeyewear.com' && (password === 'Admin@123!' || !password)) {
+          } else if (lowerEmail === 'admin@nayansukheyewear.com' && (password === 'Admin@123!' || !password)) {
             authedUser = {
               id: 'cmtv9n3q80001h8g58ixai7do',
-              email: 'admin@xyzeyewear.com',
+              email: 'admin@nayansukheyewear.com',
               role: 'ADMIN',
               isVerified: true,
               twoFactorEnabled: false,
@@ -100,7 +100,7 @@ export const AuthModal = () => {
           } else {
             authedUser = {
               id: 'usr_local_' + Date.now(),
-              email: email || 'customer@xyzeyewear.com',
+              email: email || 'customer@nayansukheyewear.com',
               role: 'CUSTOMER',
               isVerified: true,
               twoFactorEnabled: false,
@@ -153,7 +153,7 @@ export const AuthModal = () => {
           <div className="p-6 pb-4 border-b border-obsidian-100 flex items-center justify-between">
             <div>
               <span className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
-                XYZ Eyewear Membership
+                Nayan Sukh Eyewear Membership
               </span>
               <h3 className="font-serif text-2xl font-medium text-obsidian-900 mt-0.5">
                 {authModalView === 'login' && 'Sign In to Your Salon'}
@@ -291,7 +291,7 @@ export const AuthModal = () => {
                 <div className="text-center pt-2 text-xs text-obsidian-600">
                   {authModalView === 'login' && (
                     <p>
-                      New to XYZ Eyewear?{' '}
+                      New to Nayan Sukh Eyewear?{' '}
                       <button
                         type="button"
                         onClick={() => openAuthModal('register')}

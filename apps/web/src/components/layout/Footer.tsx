@@ -81,7 +81,7 @@ export const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="font-serif text-3xl font-bold tracking-[0.2em] text-white">
-                  XYZ
+                  Nayan Sukh
                 </span>
                 <span className="text-[10px] uppercase font-semibold text-gold tracking-widest">
                   E Y E W E A R
@@ -169,14 +169,14 @@ export const Footer = () => {
               <li><Link href="/warranty" className="hover:text-white transition-colors">Warranty Registration</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Concierge</Link></li>
               <li><span className="text-white block font-medium pt-2">+91 98765 43210</span></li>
-              <li><span className="text-obsidian-400 block text-[11px]">support@xyzeyewear.com</span></li>
+              <li><span className="text-obsidian-400 block text-[11px]">support@nayansukheyewear.com</span></li>
             </ul>
           </div>
         </div>
 
         {/* ─── Bottom Sub-footer ───────────────────────────────────────────── */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-obsidian-500">
-          <p>© {new Date().getFullYear()} XYZ Eyewear Ltd. All Rights Reserved. Crafted with Japanese Titanium & Mazzucchelli Acetate.</p>
+          <p>© {new Date().getFullYear()} Nayan Sukh Eyewear Ltd. All Rights Reserved. Crafted with Japanese Titanium & Mazzucchelli Acetate.</p>
           <div className="flex items-center gap-6">
             <Link href="/admin" className="text-gold hover:text-gold-400 font-medium transition-colors">Admin Portal / CMS</Link>
             <Link href="/privacy-policy" className="hover:text-obsidian-300 transition-colors">Privacy Policy</Link>

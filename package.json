@@ -1,8 +1,8 @@
 {
-  "name": "xyz-eyewear",
+  "name": "nayan-sukh-eyewear",
   "version": "0.1.0",
   "private": true,
-  "description": "XYZ Eyewear — Premium Full-Stack E-Commerce Platform",
+  "description": "Nayan Sukh Eyewear — Premium Full-Stack E-Commerce Platform",
   "workspaces": [
     "apps/*",
     "packages/*"

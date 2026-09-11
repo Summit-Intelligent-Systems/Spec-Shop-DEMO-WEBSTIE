@@ -15,11 +15,11 @@ import {
 import { apiGet, apiPatch } from '@/lib/api';
 
 const ORDERS_FALLBACK = [
-  { id: '1', orderNumber: 'XYZ-88219', customerName: 'Sophia Vane', customerEmail: 'sophia@example.com', total: 7998, status: 'PROCESSING', date: 'Sept 04', itemsCount: 1 },
-  { id: '2', orderNumber: 'XYZ-88220', customerName: 'Arjun Patel', customerEmail: 'arjun@example.com', total: 12499, status: 'SHIPPED', date: 'Sept 03', itemsCount: 2 },
-  { id: '3', orderNumber: 'XYZ-88221', customerName: 'Maya Kapoor', customerEmail: 'maya@example.com', total: 9499, status: 'PENDING', date: 'Sept 05', itemsCount: 1 },
-  { id: '4', orderNumber: 'XYZ-88222', customerName: 'Ravi Kumar', customerEmail: 'ravi@example.com', total: 3499, status: 'DELIVERED', date: 'Aug 30', itemsCount: 1 },
-  { id: '5', orderNumber: 'XYZ-88223', customerName: 'Priya Singh', customerEmail: 'priya@example.com', total: 6999, status: 'PROCESSING', date: 'Sept 02', itemsCount: 1 },
+  { id: '1', orderNumber: 'NS-88219', customerName: 'Sophia Vane', customerEmail: 'sophia@example.com', total: 7998, status: 'PROCESSING', date: 'Sept 04', itemsCount: 1 },
+  { id: '2', orderNumber: 'NS-88220', customerName: 'Arjun Patel', customerEmail: 'arjun@example.com', total: 12499, status: 'SHIPPED', date: 'Sept 03', itemsCount: 2 },
+  { id: '3', orderNumber: 'NS-88221', customerName: 'Maya Kapoor', customerEmail: 'maya@example.com', total: 9499, status: 'PENDING', date: 'Sept 05', itemsCount: 1 },
+  { id: '4', orderNumber: 'NS-88222', customerName: 'Ravi Kumar', customerEmail: 'ravi@example.com', total: 3499, status: 'DELIVERED', date: 'Aug 30', itemsCount: 1 },
+  { id: '5', orderNumber: 'NS-88223', customerName: 'Priya Singh', customerEmail: 'priya@example.com', total: 6999, status: 'PROCESSING', date: 'Sept 02', itemsCount: 1 },
 ];
 
 const statusStyles: Record<string, { label: string; color: string; icon: React.ElementType }> = {

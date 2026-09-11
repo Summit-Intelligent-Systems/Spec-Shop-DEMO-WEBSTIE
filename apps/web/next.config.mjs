@@ -92,7 +92,7 @@ const nextConfig = {
 
   // ─── Environment Variables (exposed to client) ───────────────────────────────
   env: {
-    NEXT_PUBLIC_APP_NAME: 'XYZ Eyewear',
+    NEXT_PUBLIC_APP_NAME: 'Nayan Sukh Eyewear',
     NEXT_PUBLIC_SUPABASE_URL:
       process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://aqtlpplagflpgytpzzfr.supabase.co',
     NEXT_PUBLIC_SUPABASE_ANON_KEY:

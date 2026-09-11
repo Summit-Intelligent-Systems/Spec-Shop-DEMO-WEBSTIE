@@ -1,8 +1,8 @@
 {
-  "name": "@xyz-eyewear/api",
+  "name": "@nayan-sukh-eyewear/api",
   "version": "0.1.0",
   "private": true,
-  "description": "XYZ Eyewear — Express.js REST API",
+  "description": "Nayan Sukh Eyewear — Express.js REST API",
   "main": "dist/main.js",
   "scripts": {
     "postinstall": "prisma generate",

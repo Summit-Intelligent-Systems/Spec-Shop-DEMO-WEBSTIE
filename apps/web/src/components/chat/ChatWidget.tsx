@@ -143,7 +143,7 @@ export const ChatWidget: React.FC = () => {
     {
       id: 'welcome-msg',
       sender: 'assistant',
-      text: "Hello! Welcome to XYZ Eyewear. I am your personal AI Concierge.\n\nAsk me anything from a simple 'Hi' to questions about our handcrafted frames, face shape styling, complimentary 20-step eye exams, or flagship optical salons. How can I help you today?",
+      text: "Hello! Welcome to Nayan Sukh Eyewear. I am your personal AI Concierge.\n\nAsk me anything from a simple 'Hi' to questions about our handcrafted frames, face shape styling, complimentary 20-step eye exams, or flagship optical salons. How can I help you today?",
       timestamp: new Date(),
     },
   ]);
@@ -207,7 +207,7 @@ export const ChatWidget: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to connect to XYZ AI Concierge.');
+        throw new Error(errorData.error || 'Failed to connect to Nayan Sukh AI Concierge.');
       }
 
       // Extract source citations from header
@@ -266,7 +266,7 @@ export const ChatWidget: React.FC = () => {
           msg.id === botMessageId
             ? {
                 ...msg,
-                text: "I apologize, but I encountered an issue accessing the boutique resources. Please try again or reach our team at support@xyzeyewear.com.",
+                text: "I apologize, but I encountered an issue accessing the boutique resources. Please try again or reach our team at support@nayansukheyewear.com.",
                 isStreaming: false,
               }
             : msg
@@ -282,7 +282,7 @@ export const ChatWidget: React.FC = () => {
       {
         id: `welcome-${Date.now()}`,
         sender: 'assistant',
-        text: "Welcome to XYZ Eyewear. I am your personal AI Concierge, trained on our complete catalog, optical blueprints, certified eye exam protocols, and boutique locations. How may I assist your vision today?",
+        text: "Welcome to Nayan Sukh Eyewear. I am your personal AI Concierge, trained on our complete catalog, optical blueprints, certified eye exam protocols, and boutique locations. How may I assist your vision today?",
         timestamp: new Date(),
       },
     ]);
@@ -303,7 +303,7 @@ export const ChatWidget: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(true)}
-              aria-label="Open XYZ AI Concierge"
+              aria-label="Open Nayan Sukh AI Concierge"
               className="relative flex items-center gap-3 bg-obsidian-950 text-white pl-4 pr-5 py-3.5 rounded-full shadow-2xl border border-gold/40 hover:border-gold transition-all group"
             >
               {/* Pulsing Status Dot */}
@@ -353,7 +353,7 @@ export const ChatWidget: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-1.5">
                     <h3 className="font-serif text-base font-semibold text-white tracking-wide">
-                      XYZ AI Concierge
+                      Nayan Sukh AI Concierge
                     </h3>
                     <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/15 text-gold border border-gold/30">
                       RAG Verified
@@ -534,7 +534,7 @@ export const ChatWidget: React.FC = () => {
                   <ShieldCheck className="w-3 h-3 text-emerald-400" />
                   <span>Strictly grounded in verified website resources</span>
                 </span>
-                <span>XYZ Eyewear</span>
+                <span>Nayan Sukh Eyewear</span>
               </div>
             </div>
           </motion.div>

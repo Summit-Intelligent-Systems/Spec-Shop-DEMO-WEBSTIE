@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Cart, CartItem, Product, ProductVariant } from '@xyz-eyewear/types';
+import type { Cart, CartItem, Product, ProductVariant } from '@nayan-sukh-eyewear/types';
 
 interface CartStore {
   // State
@@ -168,7 +168,7 @@ export const useCartStore = create<CartStore>()(
       getSubtotal: () => get().cart?.subtotal ?? 0,
     })),
     {
-      name: 'xyz-cart',
+      name: 'nayansukh-cart',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ cart: state.cart }),
     },

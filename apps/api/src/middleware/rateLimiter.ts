@@ -31,7 +31,7 @@ const createLimiter = (options: {
           store: new RedisStore({
             // @ts-expect-error - Type mismatch between versions but works correctly
             sendCommand: (...args: string[]) => redis.call(...args),
-            prefix: `xyz:rl:${options.keyPrefix || 'global'}:`,
+            prefix: `nayansukh:rl:${options.keyPrefix || 'global'}:`,
           }),
         }
       : {}),

@@ -8,25 +8,25 @@ const LOOKBOOK_ITEMS = [
   {
     image: '/images/hero-banner.jpg',
     title: 'The Sovereign Acetate',
-    tag: '#XYZseen',
+    tag: '#NayanSukhSeen',
     handle: '@sophia_vane',
   },
   {
     image: '/images/category-sunglasses.jpg',
     title: 'Parisian Runway Sun',
-    tag: '#XYZseen',
+    tag: '#NayanSukhSeen',
     handle: '@elena_rossi',
   },
   {
     image: '/images/category-men.jpg',
     title: 'Minimalist Architecture',
-    tag: '#XYZseen',
+    tag: '#NayanSukhSeen',
     handle: '@marcus_k',
   },
   {
     image: '/images/product-craft.jpg',
     title: 'Travertine Master Series',
-    tag: '#XYZseen',
+    tag: '#NayanSukhSeen',
     handle: '@atelier_optic',
   },
 ];
@@ -46,7 +46,7 @@ export const LookbookSection = () => {
           </div>
           <div className="flex items-center gap-2 text-xs font-semibold text-obsidian-900 hover:text-gold uppercase tracking-wider transition-colors">
             <Instagram className="w-4 h-4 text-gold" />
-            <span>Tag @xyzeyewear on Instagram to be featured</span>
+            <span>Tag @nayansukheyewear on Instagram to be featured</span>
           </div>
         </div>
 

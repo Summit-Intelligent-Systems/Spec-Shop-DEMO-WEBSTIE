@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import { FaceShapeGuideTeaser } from '@/components/home/FaceShapeGuideTeaser';
 import Link from 'next/link';
 import { Camera, Sparkles, ArrowRight, Glasses } from 'lucide-react';

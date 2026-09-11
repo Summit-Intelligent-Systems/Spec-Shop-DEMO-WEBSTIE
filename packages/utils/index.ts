@@ -1,5 +1,5 @@
 /**
- * @xyz-eyewear/utils
+ * @nayan-sukh-eyewear/utils
  * Shared utility functions used across web and api apps.
  */
 
@@ -135,12 +135,12 @@ export const generateId = (length = 12): string => {
 };
 
 /**
- * Generate an order number (e.g. XYZ-2024-A1B2C3)
+ * Generate an order number (e.g. NS-2024-A1B2C3)
  */
 export const generateOrderNumber = (): string => {
   const year = new Date().getFullYear();
   const random = generateId(6).toUpperCase();
-  return `XYZ-${year}-${random}`;
+  return `NS-${year}-${random}`;
 };
 
 /**

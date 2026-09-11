@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import { TryOnStudioClient } from './TryOnStudioClient';
 
 export const metadata: Metadata = {

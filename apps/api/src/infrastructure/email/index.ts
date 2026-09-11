@@ -138,15 +138,15 @@ const BASE_EMAIL_HTML = `
 <body>
   <div class="wrapper">
     <div class="header">
-      <div class="header-logo">XYZ EYEWEAR</div>
+      <div class="header-logo">NAYAN SUKH EYEWEAR</div>
     </div>
     <div class="content">
       {{{body}}}
     </div>
     <div class="footer">
-      <p>© 2024 XYZ Eyewear. All rights reserved.</p>
+      <p>© 2024 Nayan Sukh Eyewear. All rights reserved.</p>
       <p>123 Vision Street, Mumbai, Maharashtra 400001</p>
-      <p><a href="{{unsubscribeUrl}}" style="color: #888;">Unsubscribe</a> · <a href="https://xyzeyewear.com/privacy" style="color: #888;">Privacy Policy</a></p>
+      <p><a href="{{unsubscribeUrl}}" style="color: #888;">Unsubscribe</a> · <a href="https://nayansukheyewear.com/privacy" style="color: #888;">Privacy Policy</a></p>
     </div>
   </div>
 </body>
@@ -157,7 +157,7 @@ const BASE_EMAIL_HTML = `
 
 const INLINE_TEMPLATES: Partial<Record<EmailTemplate, string>> = {
   [EmailTemplate.WELCOME]: `
-    <h1>Welcome to XYZ Eyewear, {{firstName}}! 👋</h1>
+    <h1>Welcome to Nayan Sukh Eyewear, {{firstName}}! 👋</h1>
     <p>We're thrilled to have you as part of our community of discerning eyewear enthusiasts.</p>
     <p>Your account is all set. Start exploring our curated collection of premium frames.</p>
     <a href="{{shopUrl}}" class="btn btn-gold">Explore Collection</a>
@@ -166,7 +166,7 @@ const INLINE_TEMPLATES: Partial<Record<EmailTemplate, string>> = {
   `,
   [EmailTemplate.VERIFY_EMAIL]: `
     <h1>Verify Your Email</h1>
-    <p>Hi {{firstName}}, please verify your email address to activate your XYZ Eyewear account.</p>
+    <p>Hi {{firstName}}, please verify your email address to activate your Nayan Sukh Eyewear account.</p>
     <a href="{{verifyUrl}}" class="btn">Verify Email Address</a>
     <p style="color: #888; font-size: 13px;">This link expires in 24 hours. If you didn't create an account, ignore this email.</p>
   `,
@@ -220,7 +220,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     const html = baseCompile({
       subject: options.subject,
       body: bodyHtml,
-      unsubscribeUrl: 'https://xyzeyewear.com/unsubscribe',
+      unsubscribeUrl: 'https://nayansukheyewear.com/unsubscribe',
       ...options.data,
     });
 

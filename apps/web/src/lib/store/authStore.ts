@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { User } from '@xyz-eyewear/types';
+import type { User } from '@nayan-sukh-eyewear/types';
 
 interface AuthState {
   // State
@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: 'xyz-auth',
+      name: 'nayansukh-auth',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,

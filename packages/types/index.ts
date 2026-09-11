@@ -1,5 +1,5 @@
 /**
- * @xyz-eyewear/types
+ * @nayan-sukh-eyewear/types
  * Shared TypeScript types and interfaces used across web and api apps.
  */
 

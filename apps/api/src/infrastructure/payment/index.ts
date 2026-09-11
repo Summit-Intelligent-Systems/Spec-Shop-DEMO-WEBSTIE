@@ -8,7 +8,7 @@ import crypto from 'crypto';
 import Razorpay from 'razorpay';
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
-import { generateOrderNumber } from '@xyz-eyewear/utils';
+import { generateOrderNumber } from '@nayan-sukh-eyewear/utils';
 
 export interface CreateOrderPayload {
   amount: number; // in smallest currency unit (paise for INR, cents for USD)

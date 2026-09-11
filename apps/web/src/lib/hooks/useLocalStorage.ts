@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { safeJsonParse, isBrowser } from '@xyz-eyewear/utils';
+import { safeJsonParse, isBrowser } from '@nayan-sukh-eyewear/utils';
 
 /**
  * Persist state to localStorage with JSON serialization.

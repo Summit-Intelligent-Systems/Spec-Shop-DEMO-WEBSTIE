@@ -39,7 +39,7 @@ const STORES: Store[] = [
     address: '42, 100ft Road, Indiranagar, Stage 2',
     pincode: '560038',
     phone: '+91 80 4123 4567',
-    email: 'indiranagar@xyz-eyewear.com',
+    email: 'indiranagar@nayan-sukh-eyewear.com',
     hours: '10:00 AM – 9:00 PM (Mon–Sat) • 11:00 AM – 7:00 PM (Sun)',
     services: ['Comprehensive Eye Exam', 'Virtual Try-On Suite', 'Bespoke Engraving', 'Home Delivery', 'Frame Adjustment'],
     image: 'https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&auto=format&fit=crop&q=80',
@@ -54,7 +54,7 @@ const STORES: Store[] = [
     address: '17, Linking Road, Bandra West',
     pincode: '400050',
     phone: '+91 22 2655 1234',
-    email: 'bandra@xyz-eyewear.com',
+    email: 'bandra@nayan-sukh-eyewear.com',
     hours: '10:30 AM – 9:30 PM (All Days)',
     services: ['Eye Exam', 'Contact Lens Fitting', 'Lens Replacement', 'Insurance Claims'],
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80',
@@ -69,7 +69,7 @@ const STORES: Store[] = [
     address: 'Shop 34, Middle Lane, Khan Market',
     pincode: '110003',
     phone: '+91 11 2461 7890',
-    email: 'khanmarket@xyz-eyewear.com',
+    email: 'khanmarket@nayan-sukh-eyewear.com',
     hours: '11:00 AM – 8:30 PM (Mon–Sat) • Closed on Sundays',
     services: ['Comprehensive Eye Exam', 'Titanium Collection Showcase', 'Express Lens Lab'],
     image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&auto=format&fit=crop&q=80',
@@ -84,7 +84,7 @@ const STORES: Store[] = [
     address: 'Road No. 36, Jubilee Hills',
     pincode: '500033',
     phone: '+91 40 2354 5678',
-    email: 'jubileehills@xyz-eyewear.com',
+    email: 'jubileehills@nayan-sukh-eyewear.com',
     hours: '10:00 AM – 8:00 PM (All Days)',
     services: ['Eye Exam', 'Sunglasses Bar', 'Kids Eyewear Corner'],
     image: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=800&auto=format&fit=crop&q=80',
@@ -107,13 +107,13 @@ export default function StoresPage() {
         <div className="absolute -right-20 -top-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-[10px] font-bold tracking-[0.3em] text-gold uppercase">
-            The XYZ Eyewear Network
+            The Nayan Sukh Eyewear Network
           </span>
           <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-medium mt-3 max-w-3xl mx-auto leading-tight">
             Flagship Optical Boutiques
           </h1>
           <p className="text-base text-obsidian-400 mt-4 max-w-lg mx-auto">
-            Experience our curated collections, certified eye exams, and bespoke frame fittings at an XYZ atelier near you.
+            Experience our curated collections, certified eye exams, and bespoke frame fittings at a Nayan Sukh atelier near you.
           </p>
         </div>
       </div>

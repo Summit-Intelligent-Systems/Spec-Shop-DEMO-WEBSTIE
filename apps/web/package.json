@@ -1,5 +1,5 @@
 {
-  "name": "@xyz-eyewear/web",
+  "name": "@nayan-sukh-eyewear/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -39,9 +39,9 @@
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
-    "@xyz-eyewear/config": "*",
-    "@xyz-eyewear/types": "*",
-    "@xyz-eyewear/utils": "*",
+    "@nayan-sukh-eyewear/config": "*",
+    "@nayan-sukh-eyewear/types": "*",
+    "@nayan-sukh-eyewear/utils": "*",
     "axios": "^1.7.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

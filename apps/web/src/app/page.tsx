@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP, SEO_DEFAULTS } from '@xyz-eyewear/config';
+import { APP, SEO_DEFAULTS } from '@nayan-sukh-eyewear/config';
 import { HeroSlider } from '@/components/home/HeroSlider';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
 import { BestsellerCarousel } from '@/components/home/BestsellerCarousel';

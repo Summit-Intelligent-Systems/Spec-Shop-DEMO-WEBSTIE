@@ -206,7 +206,7 @@ export default function AdminDashboardPage() {
             Dashboard
           </h1>
           <p className="text-sm text-obsidian-500 mt-1">
-            Real-time performance metrics for XYZ Eyewear.
+            Real-time performance metrics for Nayan Sukh Eyewear.
           </p>
         </div>
         <div className="flex items-center gap-3">

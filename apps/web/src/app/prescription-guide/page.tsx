@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import Link from 'next/link';
 import { Sparkles, CheckCircle2, Glasses, ArrowRight, Eye, Sun, Monitor, CreditCard } from 'lucide-react';
 

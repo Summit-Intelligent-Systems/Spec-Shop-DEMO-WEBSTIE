@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP } from '@xyz-eyewear/config';
+import { APP } from '@nayan-sukh-eyewear/config';
 import { ShopCatalogClient } from './ShopCatalogClient';
 
 export const metadata: Metadata = {

@@ -52,7 +52,7 @@ interface OrderRecord {
 const SAMPLE_ORDERS: OrderRecord[] = [
   {
     id: 'ord-88219',
-    orderNumber: 'XYZ-88219',
+    orderNumber: 'NS-88219',
     date: 'Sept 04, 2026',
     total: 7998,
     status: 'IN_PRODUCTION',
@@ -62,7 +62,7 @@ const SAMPLE_ORDERS: OrderRecord[] = [
         id: 'item-1',
         name: 'The Sovereign Round',
         slug: 'the-sovereign-round',
-        sku: 'XYZ-OPT-001',
+        sku: 'NS-OPT-001',
         price: 7998,
         image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&auto=format&fit=crop&q=80',
         lensConfig: {
@@ -117,7 +117,7 @@ const SAMPLE_ORDERS: OrderRecord[] = [
   },
   {
     id: 'ord-74102',
-    orderNumber: 'XYZ-74102',
+    orderNumber: 'NS-74102',
     date: 'Aug 12, 2026',
     total: 12499,
     status: 'DELIVERED',
@@ -127,7 +127,7 @@ const SAMPLE_ORDERS: OrderRecord[] = [
         id: 'item-2',
         name: 'The Aurelius Aviator',
         slug: 'the-aurelius-aviator',
-        sku: 'XYZ-SUN-004',
+        sku: 'NS-SUN-004',
         price: 12499,
         image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80',
         lensConfig: {

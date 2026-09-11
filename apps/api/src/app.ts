@@ -10,7 +10,7 @@ import { logger } from './config/logger';
 import { errorHandler } from './middleware/errorHandler';
 import { rateLimiter } from './middleware/rateLimiter';
 import { AppError } from './shared/errors/AppError';
-import { HTTP_STATUS } from '@xyz-eyewear/config';
+import { HTTP_STATUS } from '@nayan-sukh-eyewear/config';
 
 // Domain route imports
 import { authRouter } from './modules/auth/auth.router';
@@ -106,7 +106,7 @@ app.use(rateLimiter.global);
 app.get('/health', (_req: Request, res: Response) => {
   res.status(HTTP_STATUS.OK).json({
     status: 'healthy',
-    service: 'xyz-eyewear-api',
+    service: 'nayan-sukh-eyewear-api',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,
@@ -144,7 +144,7 @@ app.use(`${API_PREFIX}/admin`, adminRouter);
 app.get('/', (_req: Request, res: Response) => {
   res.status(HTTP_STATUS.OK).json({
     success: true,
-    message: 'XYZ Eyewear API',
+    message: 'Nayan Sukh Eyewear API',
     docs: `${env.API_URL}/api-docs`,
     version: '1.0.0',
   });
@@ -153,7 +153,7 @@ app.get('/', (_req: Request, res: Response) => {
 app.get(API_PREFIX, (_req: Request, res: Response) => {
   res.status(HTTP_STATUS.OK).json({
     success: true,
-    message: 'XYZ Eyewear API v1',
+    message: 'Nayan Sukh Eyewear API v1',
     docs: `${env.API_URL}/api-docs`,
     version: '1.0.0',
   });

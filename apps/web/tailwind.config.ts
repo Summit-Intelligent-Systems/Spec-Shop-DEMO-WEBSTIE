@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
 /**
- * XYZ Eyewear Design System
+ * Nayan Sukh Eyewear Design System
  * Full Tailwind design token system — typography, colors, spacing, shadows, animations
  */
 const config: Config = {

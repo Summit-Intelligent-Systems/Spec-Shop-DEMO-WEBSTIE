@@ -30,7 +30,7 @@ interface PrescriptionReview {
 const INITIAL_RX: PrescriptionReview[] = [
   {
     id: 'rx-r01',
-    orderNumber: 'XYZ-88221',
+    orderNumber: 'NS-88221',
     customer: 'Maya Kapoor',
     date: 'Sept 05, 2026',
     lensType: 'Progressive',
@@ -42,7 +42,7 @@ const INITIAL_RX: PrescriptionReview[] = [
   },
   {
     id: 'rx-r02',
-    orderNumber: 'XYZ-88225',
+    orderNumber: 'NS-88225',
     customer: 'Vikram Joshi',
     date: 'Sept 06, 2026',
     lensType: 'Progressive',
@@ -55,7 +55,7 @@ const INITIAL_RX: PrescriptionReview[] = [
   },
   {
     id: 'rx-r03',
-    orderNumber: 'XYZ-88219',
+    orderNumber: 'NS-88219',
     customer: 'Sophia Vane',
     date: 'Sept 04, 2026',
     lensType: 'Single Vision',
@@ -67,7 +67,7 @@ const INITIAL_RX: PrescriptionReview[] = [
   },
   {
     id: 'rx-r04',
-    orderNumber: 'XYZ-88226',
+    orderNumber: 'NS-88226',
     customer: 'Nandini Rao',
     date: 'Sept 04, 2026',
     lensType: 'Photochromic SV',

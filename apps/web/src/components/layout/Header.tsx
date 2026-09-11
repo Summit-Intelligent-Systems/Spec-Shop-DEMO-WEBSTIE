@@ -108,7 +108,7 @@ export const Header = () => {
             <Link href="/" className="inline-block group">
               <div className="flex flex-col items-center">
                 <span className="font-serif text-2xl sm:text-3xl font-bold tracking-[0.25em] text-obsidian-950 group-hover:text-gold transition-colors">
-                  XYZ
+                  Nayan Sukh
                 </span>
                 <span className="text-[8px] sm:text-[9px] font-sans uppercase tracking-[0.4em] text-gold-700 font-medium -mt-1">
                   E Y E W E A R

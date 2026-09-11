@@ -8,8 +8,8 @@ export const ordersRouter = Router();
 
 export const ORDERS_STORE: any[] = [
   {
-    id: 'XYZ-892104',
-    orderNumber: 'XYZ-892104',
+    id: 'NS-892104',
+    orderNumber: 'NS-892104',
     userId: 'user-001',
     customerName: 'Devan Sharma',
     customerEmail: 'devan.sharma@example.com',
@@ -45,8 +45,8 @@ export const ORDERS_STORE: any[] = [
     createdAt: new Date(Date.now() - 86400000).toISOString(),
   },
   {
-    id: 'XYZ-741982',
-    orderNumber: 'XYZ-741982',
+    id: 'NS-741982',
+    orderNumber: 'NS-741982',
     userId: 'user-001',
     customerName: 'Devan Sharma',
     customerEmail: 'devan.sharma@example.com',
@@ -85,7 +85,7 @@ export const ORDERS_STORE: any[] = [
 
 ordersRouter.post('/', optionalAuth, async (req: Request, res: Response): Promise<void> => {
   const { customer, shippingAddress, items, subtotal, shippingCharge, discount, total, paymentMethod, paymentStatus, deliveryMethod } = req.body;
-  const orderNumber = `XYZ-${Math.floor(100000 + Math.random() * 900000)}`;
+  const orderNumber = `NS-${Math.floor(100000 + Math.random() * 900000)}`;
 
   const determinedPaymentStatus = paymentStatus || (paymentMethod === 'COD' ? 'PENDING' : 'PAID');
 

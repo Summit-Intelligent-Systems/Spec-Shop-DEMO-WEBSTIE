@@ -1,5 +1,5 @@
 /**
- * XYZ Eyewear — Database Seed
+ * Nayan Sukh Eyewear — Database Seed
  * Seeds essential data for development.
  * Run with: npm run db:seed (from apps/api)
  */
@@ -25,10 +25,10 @@ async function main() {
   const passwordHash = await bcrypt.hash('Admin@123!', 12);
 
   const superAdmin = await prisma.user.upsert({
-    where: { email: 'superadmin@xyzeyewear.com' },
+    where: { email: 'superadmin@nayansukheyewear.com' },
     update: {},
     create: {
-      email: 'superadmin@xyzeyewear.com',
+      email: 'superadmin@nayansukheyewear.com',
       passwordHash,
       role: UserRole.SUPER_ADMIN,
       isVerified: true,
@@ -45,10 +45,10 @@ async function main() {
   console.log(`✅ Super Admin: ${superAdmin.email}`);
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@xyzeyewear.com' },
+    where: { email: 'admin@nayansukheyewear.com' },
     update: {},
     create: {
-      email: 'admin@xyzeyewear.com',
+      email: 'admin@nayansukheyewear.com',
       passwordHash,
       role: UserRole.ADMIN,
       isVerified: true,
@@ -124,9 +124,9 @@ async function main() {
 
   const brands = await Promise.all([
     prisma.brand.upsert({
-      where: { slug: 'xyz-originals' },
+      where: { slug: 'nayan-sukh-originals' },
       update: {},
-      create: { name: 'XYZ Originals', slug: 'xyz-originals', description: 'Our signature house brand', country: 'India', isPremium: false, isActive: true, sortOrder: 1 },
+      create: { name: 'Nayan Sukh Originals', slug: 'nayan-sukh-originals', description: 'Our signature house brand', country: 'India', isPremium: false, isActive: true, sortOrder: 1 },
     }),
     prisma.brand.upsert({
       where: { slug: 'vista-luxe' },
@@ -154,7 +154,7 @@ async function main() {
     create: {
       name: 'Classic Round Acetate',
       slug: 'classic-round-black-acetate',
-      sku: 'XYZ-EG-001',
+      sku: 'NS-EG-001',
       description: 'Timeless round acetate frames with a premium finish. Lightweight, durable, and effortlessly stylish.',
       brandId: brands[0].id,
       categoryId: categories[0].id,
@@ -172,7 +172,7 @@ async function main() {
       variants: {
         create: [
           {
-            sku: 'XYZ-EG-001-BLK-M',
+            sku: 'NS-EG-001-BLK-M',
             color: 'Matte Black',
             colorHex: '#1A1A1A',
             size: 'Medium',
@@ -183,7 +183,7 @@ async function main() {
             isDefault: true,
           },
           {
-            sku: 'XYZ-EG-001-TOR-M',
+            sku: 'NS-EG-001-TOR-M',
             color: 'Tortoise',
             colorHex: '#8B4513',
             size: 'Medium',
@@ -219,7 +219,7 @@ async function main() {
         sortOrder: 1,
         benefits: [
           { icon: '💰', title: '10% Off Everything', description: 'On all products sitewide' },
-          { icon: '👁️', title: '1 Free Eye Test', description: 'At any XYZ Eyewear store' },
+          { icon: '👁️', title: '1 Free Eye Test', description: 'At any Nayan Sukh Eyewear store' },
           { icon: '📞', title: 'Priority Support', description: '24-hour response guarantee' },
           { icon: '🎯', title: 'Early Sale Access', description: 'Shop 24h before public' },
         ],
@@ -242,7 +242,7 @@ async function main() {
         sortOrder: 2,
         benefits: [
           { icon: '💰', title: '20% Off Everything', description: 'On all products sitewide' },
-          { icon: '👁️', title: '2 Free Eye Tests', description: 'At any XYZ Eyewear store' },
+          { icon: '👁️', title: '2 Free Eye Tests', description: 'At any Nayan Sukh Eyewear store' },
           { icon: '🚚', title: 'Free Shipping Always', description: 'No minimum order required' },
           { icon: '✨', title: 'Exclusive Collections', description: 'Members-only product drops' },
           { icon: '📞', title: 'Dedicated Support', description: 'Dedicated account manager' },
@@ -283,7 +283,7 @@ async function main() {
     where: { code: 'MUM-001' },
     update: {},
     create: {
-      name: 'XYZ Eyewear — Bandra',
+      name: 'Nayan Sukh Eyewear — Bandra',
       code: 'MUM-001',
       address: '123 Linking Road, Bandra West',
       city: 'Mumbai',
@@ -291,7 +291,7 @@ async function main() {
       pincode: '400050',
       country: 'India',
       phone: '+91 22 1234 5678',
-      email: 'bandra@xyzeyewear.com',
+      email: 'bandra@nayansukheyewear.com',
       lat: 19.0544,
       lng: 72.8404,
       services: ['eye_test', 'lens_fitting', 'repairs', 'adjustments'],
@@ -401,8 +401,8 @@ async function main() {
 
   console.log('\n✅ Database seeded successfully!');
   console.log('\nTest accounts:');
-  console.log('  Super Admin: superadmin@xyzeyewear.com / Admin@123!');
-  console.log('  Admin:       admin@xyzeyewear.com / Admin@123!');
+  console.log('  Super Admin: superadmin@nayansukheyewear.com / Admin@123!');
+  console.log('  Admin:       admin@nayansukheyewear.com / Admin@123!');
   console.log('  Customer:    customer@example.com / Customer@123!');
 }
 
